@@ -18,7 +18,7 @@ import java.awt.Dimension;
 public class GUIDrawer extends ThompsonTemplate{
     //declare objects
     private JPanel panel1, panel2; // Holds panels to draw in
-    final int TEXTSIZE, BOXWIDTH, BOXHEIGHT; //Set the textsize used for outputs
+    final int position, TEXTSIZE, BOXWIDTH, BOXHEIGHT, BUTTONWIDTH; //Set the textsize used for outputs
     Question holdingQuestion;
     //public HashMap<String, ArrayList<String>> dict = new HashMap<>();
     
@@ -38,11 +38,17 @@ public class GUIDrawer extends ThompsonTemplate{
     //Constructors
     public GUIDrawer(JPanel pane1, JPanel pane2){
     //empty constructor to initialize variables and lists, use for others
+        this(pane1);
+        panel2 = pane2;
+    }
+    
+    public GUIDrawer(JPanel pane1){
+        position = 0;
         TEXTSIZE = 12;
         BOXWIDTH = 400;
         BOXHEIGHT = 24;
+        BUTTONWIDTH = 100;
         panel1 = pane1;
-        panel2 = pane2;
     }
     
     
@@ -54,10 +60,10 @@ public class GUIDrawer extends ThompsonTemplate{
         panel1.repaint();
     }
     
-    public void drawControl(Question toDraw, String qType, JPanel pane2){
+    public void drawControl(Question toDraw, JPanel pane2){
         panel2.removeAll();
         
-        if(qType.equals("TEXTFIELD")){
+        if(toDraw.getType().equals("TEXTFIELD")){
             Dimension dims = new Dimension(BOXWIDTH, BOXHEIGHT);
             JTextField tempText = new JTextField(toDraw.getAnswer());
             tempText.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -65,14 +71,14 @@ public class GUIDrawer extends ThompsonTemplate{
             tempText.setMaximumSize(tempText.getPreferredSize());
             pane2.add(tempText);
         }
-        else if(qType.equals("CHECKBOX")){
-            for(String element : toDraw.getList(qType)){
+        else if(toDraw.getType().equals("CHECKBOX")){
+            for(String element : toDraw.getList(toDraw.getType())){
                 pane2.add(new JCheckBox(element));
             }
         }
-        else if (qType.equals("RADIOBUTTON")){
+        else if (toDraw.getType().equals("RADIOBUTTON")){
             ButtonGroup buttonGroup = new ButtonGroup();
-            for(String element : toDraw.getList(qType)){
+            for(String element : toDraw.getList(toDraw.getType())){
                 JRadioButton temp = new JRadioButton(element);
                 buttonGroup.add(temp);
                 pane2.add(temp);
@@ -81,16 +87,17 @@ public class GUIDrawer extends ThompsonTemplate{
         panel2.revalidate();
         panel2.repaint();
     }
-    
-    
-     
-    public void clearPanel(javax.swing.JPanel pane){
-        
+    /*
+    public void drawNavButtons(Question toDraw){
+        if(toDraw.getAnswerState()){
+            JButton nextSave = newJButton("Save and Continue");
+            JButton previous = newJButton("Previous");
+            
+        }
+    }
+    */
+    public void increment(int i){
+        position += i;
     }
     
-    public <T extends Component> void drawTest(Class<T> item, JPanel pane){
-        //Hopefully that fancy stuff up there will let this accept controls
-        //pane.add(item);
-        // NOPE, NOT WORKING
-    }
 }

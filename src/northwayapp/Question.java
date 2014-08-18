@@ -49,6 +49,7 @@ public class Question extends ThompsonTemplate{
         checkBoxList= new ArrayList<>();
         radioButtonList = new ArrayList<>();
         answerList = new ArrayList<>();
+        answerState = false;
         //dictSetUp(textFieldList, checkBoxList, radioButtonList, answerList);
         //Should be able to eliminate this due to ThompsonTemplate
         dict.put(questionTypes[0], textFieldList);
@@ -80,6 +81,9 @@ public class Question extends ThompsonTemplate{
     public String getAnswer(){
         return currentAnswer;
     }
+    public boolean getAnswerState(){
+        return answerState;
+    }
     public String getType(){
         return questionType;
     }
@@ -98,15 +102,17 @@ public class Question extends ThompsonTemplate{
     public void setType(String inputText){
         questionType = inputText;
     }
-    public void setAnswer(String answer){
+    public boolean setAnswer(String answer){
         currentAnswer = answer;
         //use the validation tool to assign answerState
         answerState = valid.isValid(answer);
+        return answerState;
     }
-    public void setAnswer(ArrayList<String> answers){
+    public boolean setAnswer(ArrayList<String> answers){
         answerList = (ArrayList<String>) answers.clone();
         //use the validation tool to assign answerState
         answerState = valid.isValid(answers);
+        return answerState;
     }
     public void setList(String type, String ... text){
         //Uses the question type to grab appropriate list, including answers
