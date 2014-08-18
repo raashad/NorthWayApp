@@ -71,8 +71,11 @@ public class GUIDrawer extends ThompsonTemplate{
             }
         }
         else if (qType.equals("RADIOBUTTON")){
+            ButtonGroup buttonGroup = new ButtonGroup();
             for(String element : toDraw.getList(qType)){
-                pane2.add(new JRadioButton(element));
+                JRadioButton temp = new JRadioButton(element);
+                buttonGroup.add(temp);
+                pane2.add(temp);
             }
         }
         panel2.revalidate();
