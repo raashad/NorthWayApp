@@ -25,8 +25,8 @@ public class NorthwayApp extends javax.swing.JFrame {
     
     public NorthwayApp() {
         initComponents();
-        drawer = new GUIDrawer(questionPanel, answerPanel);
-        drawer.drawQuestion(survey.getQuestion(position));
+        drawer = new GUIDrawer(survey, questionPanel, answerPanel, navigatorPanel);
+        //drawer.drawQuestion(survey.get(position));
     }
         
     /**
@@ -45,6 +45,7 @@ public class NorthwayApp extends javax.swing.JFrame {
         navigatorMenu = new javax.swing.JComboBox();
         questionPanel = new javax.swing.JPanel();
         answerPanel = new javax.swing.JPanel();
+        navigatorPanel = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         startScreen = new javax.swing.JPanel();
@@ -62,6 +63,8 @@ public class NorthwayApp extends javax.swing.JFrame {
 
         answerPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         answerPanel.setLayout(new javax.swing.BoxLayout(answerPanel, javax.swing.BoxLayout.Y_AXIS));
+
+        navigatorPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jButton1.setText("jButton1");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -92,6 +95,10 @@ public class NorthwayApp extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton1)))
                 .addContainerGap())
+            .addGroup(questionScreenLayout.createSequentialGroup()
+                .addGap(139, 139, 139)
+                .addComponent(navigatorPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(134, Short.MAX_VALUE))
         );
         questionScreenLayout.setVerticalGroup(
             questionScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -102,7 +109,9 @@ public class NorthwayApp extends javax.swing.JFrame {
                 .addComponent(questionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(answerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(navigatorPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addGroup(questionScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
@@ -131,7 +140,7 @@ public class NorthwayApp extends javax.swing.JFrame {
             .addGroup(startScreenLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jFileChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(115, Short.MAX_VALUE))
+                .addContainerGap(158, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("tab2", startScreen);
@@ -149,7 +158,7 @@ public class NorthwayApp extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(75, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         pack();
@@ -157,12 +166,12 @@ public class NorthwayApp extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if(position < survey.size()-1) position += 1;
-        drawer.drawQuestion(survey.getQuestion(position));
+        //drawer.drawQuestion();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         if(position > 0) position -= 1;
-        drawer.drawQuestion(survey.getQuestion(position));
+        //drawer.drawQuestion();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jFileChooser1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFileChooser1ActionPerformed
@@ -220,6 +229,7 @@ public class NorthwayApp extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JComboBox navigatorMenu;
+    private javax.swing.JPanel navigatorPanel;
     public javax.swing.JPanel questionPanel;
     public javax.swing.JPanel questionScreen;
     private javax.swing.JPanel startScreen;
