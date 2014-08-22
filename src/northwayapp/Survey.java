@@ -5,9 +5,15 @@
  */
 
 package northwayapp;
-import java.util.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Class that contains a list of questions, has operations to grab a certain component
@@ -45,6 +51,7 @@ public class Survey {
             while(scanner.hasNextLine()){
                 survey.add(creationTool.populate(scanner.nextLine()));
             }
+            scanner.close();
         }
         catch(FileNotFoundException e){
             System.err.println(
@@ -68,12 +75,28 @@ public class Survey {
         return (ArrayList<Question>)survey;
     }
     
-    public Question getQuestion(int i){
+    public Question get(int i){
         return survey.get(i);
     }
     
     public int size(){
         return survey.size();
+    }
+    
+    public void writeToFile(Path path){
+        List<String> lines = new ArrayList<>();
+        for(Question question : survey){
+            lines.add(question.lineToWrite());
+        }
+        /*
+        OutputStream out = Files.newOutputStream(file.toPath());
+        for(Question question : this.getList()){
+          */
+        try {
+            Files.write(path, lines);
+        } catch (IOException ex) {
+            Logger.getLogger(Survey.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

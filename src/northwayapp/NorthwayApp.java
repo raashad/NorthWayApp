@@ -6,6 +6,7 @@
 
 package northwayapp;
 
+import java.io.File;
 
 /**
  *
@@ -18,6 +19,7 @@ public class NorthwayApp extends javax.swing.JFrame {
      */
     
     int position = 0;
+    File answerFile;
     
     //TestQuestion testQ = new TestQuestion();
     Survey survey = new Survey("auto_quote_questions.txt");
@@ -175,7 +177,7 @@ public class NorthwayApp extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jFileChooser1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFileChooser1ActionPerformed
-        // TODO add your handling code here:
+        answerFile = jFileChooser1.getSelectedFile();
     }//GEN-LAST:event_jFileChooser1ActionPerformed
     
     

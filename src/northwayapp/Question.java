@@ -81,6 +81,9 @@ public class Question extends ThompsonTemplate{
     public String getAnswer(){
         return currentAnswer;
     }
+    public ArrayList<String> getAnswerList(){
+        return answerList;
+    }
     public boolean getAnswerState(){
         return answerState;
     }
@@ -117,5 +120,17 @@ public class Question extends ThompsonTemplate{
     public void setList(String type, String ... text){
         //Uses the question type to grab appropriate list, including answers
         dict.get(type).addAll(Arrays.asList(text));
+    }
+    //method to write string as a line
+    public String lineToWrite(String delim){
+        String line = new String();
+        line += name;
+        for(String answer : answerList){
+            line += (";" + answer);
+        }
+        return line;
+    }
+    public String lineToWrite(){
+        return this.lineToWrite(";");
     }
 }
