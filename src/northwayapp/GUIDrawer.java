@@ -43,7 +43,7 @@ public class GUIDrawer extends ThompsonTemplate{
         this(pane1, pane2);
         this.survey = survey;
         panel3 = pane3;
-        navigator = new NavController(this, survey);
+        navigator = new NavController(this, survey, survey.getClientFileName());
         //holdingQuestion = survey.get(position);
         drawQuestion();
     }
@@ -145,7 +145,7 @@ public class GUIDrawer extends ThompsonTemplate{
     
     public void increment(int i){
         position += i;
-        if(position < 0) position = 0;
+        if(position < 0 || position >= survey.size()) position = 0;
         drawQuestion();
     }
     

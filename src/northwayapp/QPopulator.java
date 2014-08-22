@@ -47,4 +47,20 @@ public class QPopulator extends ThompsonTemplate{
         else return new Question(
             tempList.get(0), tempList.get(1), tempList.get(2));
     }
+    // returns a boolean to tell if we should keep
+    public boolean populateAnswer(String textLine, Question question){
+        valid = new ValidationTool();
+        tempList = new ArrayList<>();
+        tempList.addAll(Arrays.asList(textLine.split(delim)));
+        tempList2 = new ArrayList<>(tempList.subList(1, tempList.size()));
+        
+        //check if it is the right question to be answering
+        if(valid.isNotEmpty(tempList2) 
+                && tempList.get(0).equals(question.getName())){
+            //not sure if this will work, since I'm not cloning the list...
+            question.setAnswer(tempList2);
+            return true;
+        }
+        else return false;
+    }
 }

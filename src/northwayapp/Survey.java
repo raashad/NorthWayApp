@@ -24,6 +24,7 @@ public class Survey {
     List<String> names;
     List<Question> survey = new ArrayList<Question>(); //DO I NEED TO INITIALIZE???
     QPopulator creationTool;
+    File file, clientFile;
     //Constructors
     public Survey(ArrayList<Question> questionList){
         //This one takes in a list of questions
@@ -37,21 +38,27 @@ public class Survey {
         survey.add(singleQuestion);
         //getNamesFromList();
     }
-    public Survey(String fileName){
+    public Survey(File file, File answerFile){
+        this(file.getPath(), answerFile.getPath());
+    }
+    public Survey(String fileName, String clientFileName){
         /* this one will take a text file name and then populate survey
          * by using a Question method to convert the lines of the text file
          * into Questions
          */
         try{
             survey = new ArrayList<>();
-            File file = new File(fileName);
+            file = new File(fileName);
             Scanner scanner = new Scanner(file);
             creationTool = new QPopulator();
-            //need to determin
+            //need to determine
             while(scanner.hasNextLine()){
                 survey.add(creationTool.populate(scanner.nextLine()));
             }
             scanner.close();
+            
+            clientFile = new File(clientFileName);
+            this.getWrittenAnswers(clientFile);
         }
         catch(FileNotFoundException e){
             System.err.println(
@@ -59,6 +66,26 @@ public class Survey {
         }
     }
     
+    public void getWrittenAnswers(File answerFile){
+        try{
+            Scanner scanner = new Scanner(answerFile);
+            int i = 0;
+            while(scanner.hasNextLine()){
+                //break out of the loop if it hits an invalid answer
+                if(!creationTool.populateAnswer(
+                        scanner.nextLine(), this.get(i))){
+                    break;
+                }
+                else i += 1;
+            }
+            scanner.close();
+            
+        }
+        catch(FileNotFoundException e){
+            System.err.println(
+                    "Caught FileNotFoundException: " + e.getMessage());
+        }
+    }
     
     private void getNamesFromList(){
         /*iterates through question list to 
@@ -78,7 +105,9 @@ public class Survey {
     public Question get(int i){
         return survey.get(i);
     }
-    
+    public String getClientFileName(){
+        return clientFile.getPath();
+    }
     public int size(){
         return survey.size();
     }

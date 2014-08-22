@@ -27,7 +27,14 @@ public class ValidationTool {
         words.replaceAll("\\s", "");
         return !words.equals("");
     }
-    
+    public boolean isValid(String... inputs){
+        flag = false;
+        for(String element : inputs){
+            flag = isValid(element);
+            if(!flag) break;
+        }
+        return flag;
+    }
     public boolean isValid(ArrayList<String> input){
         for(String element : input){
             flag = isValid(element); //set flag before checking
@@ -35,5 +42,12 @@ public class ValidationTool {
         }
         return flag;
         
+    }
+    public boolean isNotEmpty(ArrayList<String> input){
+        flag = false;
+        for(String element : input){
+            if(isValid(element)) flag = true; //only needs one valid entry     
+        }
+        return flag;
     }
 }

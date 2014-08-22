@@ -22,7 +22,12 @@ public class NavController {
     Question question;
     Survey survey;
     ValidationTool validator;
+    String clientFile;
     
+    public NavController(GUIDrawer drawer, Survey survey, String clientFile){
+        this(drawer, survey);
+        this.clientFile = clientFile;
+    }
     public NavController(GUIDrawer drawer, Survey survey){
         this.drawer = drawer;
         this.survey = survey;
@@ -94,7 +99,7 @@ public class NavController {
             //if save is successful, then increment
             if(save()) next();
             //and write to file
-            survey.writeToFile(Paths.get("zzztestSave.txt"));
+            survey.writeToFile(Paths.get(clientFile));
         }
         
     }
