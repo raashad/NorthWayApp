@@ -65,6 +65,7 @@ public class NorthwayApp extends javax.swing.JFrame {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
+        jDialog1 = new javax.swing.JDialog();
         cardPanel = new javax.swing.JPanel();
         tempStartPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -86,6 +87,17 @@ public class NorthwayApp extends javax.swing.JFrame {
         textPanel = new javax.swing.JPanel();
         fieldsPanel = new javax.swing.JPanel();
         navPanel = new javax.swing.JPanel();
+
+        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
+        jDialog1.getContentPane().setLayout(jDialog1Layout);
+        jDialog1Layout.setHorizontalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jDialog1Layout.setVerticalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Title");
@@ -238,10 +250,28 @@ public class NorthwayApp extends javax.swing.JFrame {
 
         cardPanel.add(tempStartPanel, "card2");
 
+        surveyPanel.setNextFocusableComponent(fieldsPanel);
+        surveyPanel.addContainerListener(new java.awt.event.ContainerAdapter() {
+            public void componentAdded(java.awt.event.ContainerEvent evt) {
+                surveyPanelComponentAdded(evt);
+            }
+        });
+
         jTextField5.setEditable(false);
         jTextField5.setText("Quote Type");
         jTextField5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jTextField5.setOpaque(false);
+
+        textPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        fieldsPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        fieldsPanel.addContainerListener(new java.awt.event.ContainerAdapter() {
+            public void componentAdded(java.awt.event.ContainerEvent evt) {
+                fieldsPanelComponentAdded(evt);
+            }
+        });
+
+        navPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         javax.swing.GroupLayout surveyPanelLayout = new javax.swing.GroupLayout(surveyPanel);
         surveyPanel.setLayout(surveyPanelLayout);
@@ -250,13 +280,13 @@ public class NorthwayApp extends javax.swing.JFrame {
             .addGroup(surveyPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(surveyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(surveyPanelLayout.createSequentialGroup()
+                        .addComponent(textPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 169, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, surveyPanelLayout.createSequentialGroup()
-                        .addGap(0, 435, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(fieldsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(surveyPanelLayout.createSequentialGroup()
-                        .addComponent(textPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(navPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -266,11 +296,11 @@ public class NorthwayApp extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(textPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(fieldsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 225, Short.MAX_VALUE)
-                .addComponent(navPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(textPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addComponent(fieldsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addComponent(navPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -315,7 +345,7 @@ public class NorthwayApp extends javax.swing.JFrame {
             quoteFile = new File(quoteFileName);
             clientFile = new File(clientFileName);
             createSurveySpace(quoteFile, clientFile,
-                    textPanel, fieldsPanel, navPanel);
+                textPanel, fieldsPanel, navPanel);
         }
         else{
             agentName.setText(errorMsg);
@@ -323,6 +353,20 @@ public class NorthwayApp extends javax.swing.JFrame {
             clientFirstName.setText(errorMsg);
         }
     }//GEN-LAST:event_startSurveyButtonActionPerformed
+
+    private void fieldsPanelComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_fieldsPanelComponentAdded
+        if(evt.getComponent() instanceof JTextField){
+            evt.getComponent().requestFocus();
+        }
+        evt.getComponent().requestFocus();
+    }//GEN-LAST:event_fieldsPanelComponentAdded
+
+    private void surveyPanelComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_surveyPanelComponentAdded
+        if(evt.getComponent() instanceof JTextField){
+            evt.getComponent().requestFocus();
+        }
+        evt.getComponent().requestFocus();
+    }//GEN-LAST:event_surveyPanelComponentAdded
     
     
     
@@ -374,6 +418,7 @@ public class NorthwayApp extends javax.swing.JFrame {
     private javax.swing.JTextField clientLastName;
     private javax.swing.JPanel fieldsPanel;
     private javax.swing.JButton jButton1;
+    private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
