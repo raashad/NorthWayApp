@@ -8,6 +8,7 @@ package northwayapp;
 
 import java.awt.CardLayout;
 import java.io.File;
+import java.util.*;
 import javax.swing.*;
 
 /**
@@ -21,40 +22,45 @@ public class NorthwayApp extends javax.swing.JFrame {
      */
     
     int position = 0;
-    String quoteFileName, clientFileName;
+    List<String> fileInfo;
     File quoteFile, clientFile;
     
     //TestQuestion testQ = new TestQuestion();
     Survey survey;
     GUIDrawer drawer;
     ValidationTool validator;
+    FileOperator twoFiles;
+    String quoteType, agent, lastName, firstName, quoteTypeLabel;
     
     public NorthwayApp() {
         initComponents();
-        quoteFileName = "auto_quote_questions.txt";
+        fileInfo = new ArrayList<>();
         validator = new ValidationTool();
+        twoFiles = new FileOperator();
+        
+        //temporary to work on layout
+        quoteType = "Auto";
+        twoFiles.setQuoteSheet(quoteType);
+        twoFiles.setFile("Dell", "Doe", "John");
+        
+        createSurveySpace(twoFiles,
+                textPanel, fieldsPanel, navPanel);
     }
     
     // function to create the survey and put it in the correct panels
     public void createSurveySpace(
-            File quoteF, File clientF,
+            FileOperator files,
             JPanel textP, JPanel fieldsP, JPanel navP){
         
-        survey  = new Survey(quoteF, clientF);
+        survey  = files.createSurvey();
         drawer = new GUIDrawer(survey, textP, fieldsP, navP);
         CardLayout cl = (CardLayout)cardPanel.getLayout();
         cl.next(cardPanel);
+        quoteTypeLabel = quoteType.toUpperCase();
+        quoteHeaderLabel.setText(quoteTypeLabel);
     }
     
-    //function to create filename from inputs
-    public String createFileName(String ... inputs){
-        String fileName = new String();
-        for(String element : inputs){
-            fileName += element.toLowerCase();
-        }
-        fileName += ".txt";
-        return fileName;
-    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -65,7 +71,10 @@ public class NorthwayApp extends javax.swing.JFrame {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
-        jDialog1 = new javax.swing.JDialog();
+        fileCreationErrorDB = new javax.swing.JDialog();
+        jLabel6 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        notebook = new javax.swing.JDialog();
         cardPanel = new javax.swing.JPanel();
         tempStartPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -73,29 +82,58 @@ public class NorthwayApp extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         agentName = new javax.swing.JTextField();
-        quoteType = new javax.swing.JComboBox();
+        quotePicker = new javax.swing.JComboBox();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         clientLastName = new javax.swing.JTextField();
         clientFirstName = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jTextField4 = new javax.swing.JTextField();
+        checkFileButton = new javax.swing.JButton();
+        fileExistsField = new javax.swing.JTextField();
         startSurveyButton = new javax.swing.JButton();
         surveyPanel = new javax.swing.JPanel();
-        jTextField5 = new javax.swing.JTextField();
         textPanel = new javax.swing.JPanel();
         fieldsPanel = new javax.swing.JPanel();
         navPanel = new javax.swing.JPanel();
+        quoteHeaderLabel = new javax.swing.JLabel();
 
-        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
-        jDialog1.getContentPane().setLayout(jDialog1Layout);
-        jDialog1Layout.setHorizontalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jLabel6.setText("An Error has occured");
+
+        jButton2.setText("Someday I'll do something");
+
+        javax.swing.GroupLayout fileCreationErrorDBLayout = new javax.swing.GroupLayout(fileCreationErrorDB.getContentPane());
+        fileCreationErrorDB.getContentPane().setLayout(fileCreationErrorDBLayout);
+        fileCreationErrorDBLayout.setHorizontalGroup(
+            fileCreationErrorDBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(fileCreationErrorDBLayout.createSequentialGroup()
+                .addGap(152, 152, 152)
+                .addComponent(jLabel6)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, fileCreationErrorDBLayout.createSequentialGroup()
+                .addContainerGap(82, Short.MAX_VALUE)
+                .addComponent(jButton2)
+                .addGap(161, 161, 161))
+        );
+        fileCreationErrorDBLayout.setVerticalGroup(
+            fileCreationErrorDBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(fileCreationErrorDBLayout.createSequentialGroup()
+                .addGap(89, 89, 89)
+                .addComponent(jLabel6)
+                .addGap(18, 18, 18)
+                .addComponent(jButton2)
+                .addContainerGap(156, Short.MAX_VALUE))
+        );
+
+        notebook.setAlwaysOnTop(true);
+
+        javax.swing.GroupLayout notebookLayout = new javax.swing.GroupLayout(notebook.getContentPane());
+        notebook.getContentPane().setLayout(notebookLayout);
+        notebookLayout.setHorizontalGroup(
+            notebookLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 400, Short.MAX_VALUE)
         );
-        jDialog1Layout.setVerticalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        notebookLayout.setVerticalGroup(
+            notebookLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 300, Short.MAX_VALUE)
         );
 
@@ -114,11 +152,16 @@ public class NorthwayApp extends javax.swing.JFrame {
         jLabel5.setText("Type of Quote");
 
         agentName.setText("Dell");
-
-        quoteType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Auto", "Home" }));
-        quoteType.addActionListener(new java.awt.event.ActionListener() {
+        agentName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                quoteTypeActionPerformed(evt);
+                agentNameActionPerformed(evt);
+            }
+        });
+
+        quotePicker.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "(Select)", "Auto", "Home" }));
+        quotePicker.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                quotePickerActionPerformed(evt);
             }
         });
 
@@ -131,6 +174,11 @@ public class NorthwayApp extends javax.swing.JFrame {
         clientLastName.setText("Doe");
 
         clientFirstName.setText("John");
+        clientFirstName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clientFirstNameActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -162,15 +210,15 @@ public class NorthwayApp extends javax.swing.JFrame {
                 .addGap(0, 12, Short.MAX_VALUE))
         );
 
-        jButton1.setText("Check if a file already exists");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        checkFileButton.setText("Check if a file already exists");
+        checkFileButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                checkFileButtonActionPerformed(evt);
             }
         });
 
-        jTextField4.setEditable(false);
-        jTextField4.setOpaque(false);
+        fileExistsField.setEditable(false);
+        fileExistsField.setOpaque(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -189,11 +237,11 @@ public class NorthwayApp extends javax.swing.JFrame {
                                 .addGap(26, 26, 26)
                                 .addComponent(jLabel5)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(quoteType, 0, 90, Short.MAX_VALUE))
+                        .addComponent(quotePicker, 0, 90, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(checkFileButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField4)))
+                        .addComponent(fileExistsField)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -204,17 +252,18 @@ public class NorthwayApp extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(agentName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
-                    .addComponent(quoteType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(quotePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(46, 46, 46))
+                    .addComponent(checkFileButton)
+                    .addComponent(fileExistsField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(34, 34, 34))
         );
 
         startSurveyButton.setText("Start Survey");
+        startSurveyButton.setEnabled(false);
         startSurveyButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 startSurveyButtonActionPerformed(evt);
@@ -242,8 +291,8 @@ public class NorthwayApp extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addComponent(startSurveyButton)
                 .addContainerGap())
         );
@@ -257,51 +306,54 @@ public class NorthwayApp extends javax.swing.JFrame {
             }
         });
 
-        jTextField5.setEditable(false);
-        jTextField5.setText("Quote Type");
-        jTextField5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jTextField5.setOpaque(false);
-
-        textPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        textPanel.setLayout(new javax.swing.BoxLayout(textPanel, javax.swing.BoxLayout.X_AXIS));
 
         fieldsPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        fieldsPanel.setNextFocusableComponent(navPanel);
         fieldsPanel.addContainerListener(new java.awt.event.ContainerAdapter() {
             public void componentAdded(java.awt.event.ContainerEvent evt) {
                 fieldsPanelComponentAdded(evt);
             }
         });
 
-        navPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        quoteHeaderLabel.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
+        quoteHeaderLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        quoteHeaderLabel.setText("Quote Type");
 
         javax.swing.GroupLayout surveyPanelLayout = new javax.swing.GroupLayout(surveyPanel);
         surveyPanel.setLayout(surveyPanelLayout);
         surveyPanelLayout.setHorizontalGroup(
             surveyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(surveyPanelLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(surveyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(surveyPanelLayout.createSequentialGroup()
-                        .addComponent(textPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 169, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, surveyPanelLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(fieldsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(navPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(quoteHeaderLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(surveyPanelLayout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addComponent(textPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, surveyPanelLayout.createSequentialGroup()
+                        .addGap(0, 14, Short.MAX_VALUE)
+                        .addGroup(surveyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(surveyPanelLayout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(navPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 484, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(fieldsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         surveyPanelLayout.setVerticalGroup(
             surveyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(surveyPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(quoteHeaderLabel)
+                .addGap(28, 28, 28)
+                .addComponent(textPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(textPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
-                .addComponent(fieldsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addComponent(fieldsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(navPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(136, 136, 136))
         );
 
         cardPanel.add(surveyPanel, "card3");
@@ -326,31 +378,54 @@ public class NorthwayApp extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void quoteTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quoteTypeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_quoteTypeActionPerformed
+    private void quotePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quotePickerActionPerformed
+        //sets the quote file if there is a valid selection
+        JComboBox cb = (JComboBox)evt.getSource();
+        quoteType = String.valueOf(cb.getSelectedItem());
+        if(!twoFiles.setQuoteSheet(quoteType)){
+            twoFiles.setQuoteSheet(null);
+        }
+    }//GEN-LAST:event_quotePickerActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void startSurveyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startSurveyButtonActionPerformed
-        String agent, lastName, firstName;
-        String errorMsg = "ENTER VALID INPUTS!";
+    private void checkFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkFileButtonActionPerformed
         agent = agentName.getText();
         lastName = clientLastName.getText();
         firstName = clientFirstName.getText();
-        if(validator.isValid(agent,lastName,firstName)){
-            clientFileName = createFileName(agent,lastName,firstName);
-            quoteFile = new File(quoteFileName);
-            clientFile = new File(clientFileName);
-            createSurveySpace(quoteFile, clientFile,
-                textPanel, fieldsPanel, navPanel);
+        startSurveyButton.setEnabled(false);
+        //if the quote is selected and file works
+
+        if(twoFiles.validQuote()){
+            if(twoFiles.setFile(agent, lastName, firstName)){
+                if (twoFiles.fileExists()){
+                    startSurveyButton.setText("Continue quote");
+                    fileExistsField.setText("File exists");
+                    startSurveyButton.setEnabled(true);
+                }
+                else{
+                    //twoFiles.createFile();
+                    startSurveyButton.setText("Make a new quote");
+                    fileExistsField.setText(twoFiles.getFileName());
+                    startSurveyButton.setEnabled(true);
+                }
+                if(!twoFiles.notesExists()) twoFiles.createNotes();
+            }
+            else fileExistsField.setText("Please fill in all fields");  
         }
-        else{
-            agentName.setText(errorMsg);
-            clientLastName.setText(errorMsg);
-            clientFirstName.setText(errorMsg);
+
+
+        else fileExistsField.setText("Quote type is not supported");
+    }//GEN-LAST:event_checkFileButtonActionPerformed
+
+    private void startSurveyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startSurveyButtonActionPerformed
+        if(!twoFiles.fileExists()){
+            twoFiles.createFile();
+        }
+        try{
+            createSurveySpace(twoFiles,
+                textPanel, fieldsPanel, navPanel);
+        }catch(IllegalArgumentException e){
+            System.err.println("fileOperator can't make the survey: " + e.getMessage());
+            fileCreationErrorDB.getParent().add(fileCreationErrorDB);
         }
     }//GEN-LAST:event_startSurveyButtonActionPerformed
 
@@ -367,6 +442,14 @@ public class NorthwayApp extends javax.swing.JFrame {
         }
         evt.getComponent().requestFocus();
     }//GEN-LAST:event_surveyPanelComponentAdded
+
+    private void clientFirstNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clientFirstNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_clientFirstNameActionPerformed
+
+    private void agentNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agentNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_agentNameActionPerformed
     
     
     
@@ -414,22 +497,25 @@ public class NorthwayApp extends javax.swing.JFrame {
     private javax.swing.JTextField agentName;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JPanel cardPanel;
+    private javax.swing.JButton checkFileButton;
     private javax.swing.JTextField clientFirstName;
     private javax.swing.JTextField clientLastName;
     private javax.swing.JPanel fieldsPanel;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JDialog jDialog1;
+    private javax.swing.JDialog fileCreationErrorDB;
+    private javax.swing.JTextField fileExistsField;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
     private javax.swing.JPanel navPanel;
-    private javax.swing.JComboBox quoteType;
+    private javax.swing.JDialog notebook;
+    private javax.swing.JLabel quoteHeaderLabel;
+    private javax.swing.JComboBox quotePicker;
     private javax.swing.JButton startSurveyButton;
     private javax.swing.JPanel surveyPanel;
     private javax.swing.JPanel tempStartPanel;

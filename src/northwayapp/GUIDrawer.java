@@ -7,9 +7,10 @@
 package northwayapp;
 
 import java.awt.Component; // lets me pass general Component to methods(NOT)
+import java.awt.Dimension;
+import java.awt.Font;
 import java.util.*;
 import javax.swing.*; //well, might have to remove the precursor in a lot
-import java.awt.Dimension;
 
 /**
  *
@@ -20,9 +21,11 @@ public class GUIDrawer extends ThompsonTemplate{
     private JPanel panel1, panel2, panel3; // Holds panels to draw in
     int position;
     final int TEXTSIZE, BOXWIDTH, BOXHEIGHT, BUTTONWIDTH; //Set the textsize used for outputs
+    final String FONTNAME;
     Question holdingQuestion;
     Survey survey;
     NavController navigator;
+    Font labelFont, fieldFont;
     //public HashMap<String, ArrayList<String>> dict = new HashMap<>();
     
 /*  I DONT THINK I NEED THESE!!!
@@ -56,10 +59,13 @@ public class GUIDrawer extends ThompsonTemplate{
     
     public GUIDrawer(JPanel pane1){
         position = 0;
-        TEXTSIZE = 12;
-        BOXWIDTH = 400;
+        TEXTSIZE = 18;
+        FONTNAME = "VANI";
+        BOXWIDTH = 500;
         BOXHEIGHT = 35;
         BUTTONWIDTH = 100;
+        labelFont = new Font(FONTNAME, Font.PLAIN, TEXTSIZE);
+        
         panel1 = pane1;
     }
     
@@ -80,8 +86,10 @@ public class GUIDrawer extends ThompsonTemplate{
     }
     // drawing methods
     private void drawQuestion(){
-        panel1.removeAll();       
-        panel1.add(new JLabel(getQuestion().getQuestion())); //Draw JLabel
+        panel1.removeAll();  
+        JLabel temp = new JLabel(getQuestion().getQuestion());
+        temp.setFont(labelFont);
+        panel1.add(temp); //Draw JLabel
         drawControl(getQuestion(), panel2);
         drawNavButtons(panel3);
         panel1.revalidate();
