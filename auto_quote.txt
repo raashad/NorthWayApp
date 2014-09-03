@@ -1,0 +1,16 @@
+Group;Group;TEXTFIELD
+Date;Date (MM/DD/YYYY);TEXTFIELD
+Name;Name;TEXTFIELD
+Email;Email Address;TEXTFIELD
+D1Name;Driver 1 name;TEXTFIELD
+D1DOB;Date of Birth;TEXTFIELD
+D2Name;Driver 2 name;TEXTFIELD
+D2DOB;Date of Birth;TEXTFIELD
+V1YMM;Vehicle 1 Year, Make, Model;TEXTFIELD
+V1ABS;ABS?;RADIOBUTTON;Yes;No
+V1Airbags;What Air Bag protection does vehicle 1 have?;CHECKBOX;Drivers;Both;With Side;None
+V1Coverage;What coverage is desired for vehicle 1?;RADIOBUTTON;Comprehensive;Collision Broad;Collision Standard;None
+V2YMM;Vehicle 2 Year, Make, Model;TEXTFIELD
+V2ABS;ABS?;RADIOBUTTON;Yes;No
+V2Airbags;What Air Bag protection does vehicle 2 have?;CHECKBOX;Drivers;Both;With Side;None
+V2Coverage;What coverage is desired for vehicle 2?;RADIOBUTTON;Comprehensive;Collision Broad;Collision Standard;None

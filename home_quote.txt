@@ -1,0 +1,5 @@
+Group;Group;TEXTFIELD
+Date;Date (MM/DD/YYYY);TEXTFIELD
+Name;Name;TEXTFIELD
+AirBags;What Air Bag protection does the vehicle have?;CHECKBOX;Drivers;Both;With Side;None
+Coverage;What coverage does the vehicle want?;RADIOBUTTON;Comprehensive;Collision Broad;Collision Standard;None

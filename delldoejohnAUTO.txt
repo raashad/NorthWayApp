@@ -1,0 +1,16 @@
+Group;Cool guy insurance
+Date;9/2/2014
+Name;John Doe
+Email;jdoe@gmail.com
+D1Name;John Doe
+D1DOB;10/25/1988
+D2Name;Jane Doe
+D2DOB;10/23/1987
+LASTV1YMM
+V1ABS
+V1Airbags
+V1Coverage
+V2YMM
+V2ABS
+V2Airbags
+V2Coverage
