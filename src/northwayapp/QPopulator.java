@@ -52,6 +52,11 @@ public class QPopulator extends ThompsonTemplate{
         valid = new ValidationTool();
         tempList = new ArrayList<>();
         tempList.addAll(Arrays.asList(textLine.split(delim)));
+        if (tempList.get(0).equals(LAST)){
+            question.setLastState(true);
+            tempList.remove(0);
+        }
+        else question.setLastState(false);
         tempList2 = new ArrayList<>(tempList.subList(1, tempList.size()));
         
         //check if it is the right question to be answering

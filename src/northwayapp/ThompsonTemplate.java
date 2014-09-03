@@ -34,7 +34,7 @@ public class ThompsonTemplate {
     public HashMap<String, String> quoteNamesDict = new HashMap<>();
     public HashMap<String, String> quoteFilesDict = new HashMap<>();
       
-    
+    public final static String LAST = "LAST";
     
     
     

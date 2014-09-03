@@ -9,6 +9,8 @@ package northwayapp;
 import java.awt.Component; // lets me pass general Component to methods(NOT)
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.*;
 import javax.swing.*; //well, might have to remove the precursor in a lot
 
@@ -48,6 +50,7 @@ public class GUIDrawer extends ThompsonTemplate{
         panel3 = pane3;
         navigator = new NavController(this, survey, survey.getClientFileName());
         //holdingQuestion = survey.get(position);
+        position = this.survey.getLastQuestionIndex();
         drawQuestion();
     }
     
@@ -139,6 +142,10 @@ public class GUIDrawer extends ThompsonTemplate{
         panel2.revalidate();
         panel2.repaint();
     }
+    
+    public void actionPerformed(ActionEvent evt){
+        navigator.saveAndContinue();
+    }
 
     public void drawNavButtons(JPanel pane){
         pane.removeAll();
@@ -154,6 +161,14 @@ public class GUIDrawer extends ThompsonTemplate{
     public void increment(int i){
         position += i;
         if(position < 0 || position >= survey.size()) position = 0;
+        drawQuestion();
+    }
+    public void jumpTo(int i){
+        position = i;
+        drawQuestion();
+    }
+    public void jumpToLast(){
+        position = survey.getLastQuestionIndex();
         drawQuestion();
     }
     

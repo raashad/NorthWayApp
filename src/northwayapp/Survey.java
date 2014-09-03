@@ -127,5 +127,31 @@ public class Survey {
             Logger.getLogger(Survey.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    public int getLastQuestionIndex(){
+        this.determineLastQuestion();
+        int lastIndex = 0;
+        for(Question question:this.survey){
+            if(question.isLastQ()) lastIndex =  survey.indexOf(question);
+        }
+        return lastIndex;
+    }
+    public boolean isLastQuestion(int i){
+        this.determineLastQuestion();
+        return survey.get(i).isLastQ();
+    }
+    public void determineLastQuestion(){
+        boolean lastFound = false;
+        //start at index 1 and back set answerstate to avoid out of bounds
+        for(int i = 1; i < this.survey.size(); i++){
+            if (this.survey.get(i).getAnswerState()
+                    || lastFound){
+                this.survey.get(i).setLastState(false);
+            }
+            else{
+                this.survey.get(i).setLastState(true);
+                lastFound = true;
+            }
+        }
+    }
 
 }

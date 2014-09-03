@@ -16,7 +16,7 @@ public class Question extends ThompsonTemplate{
     //declare variables
     private String name, label, questionType, currentAnswer;
     private int position;
-    private boolean answerState;
+    private boolean answerState, isLast;
     private ArrayList<String> textFieldList, checkBoxList, radioButtonList;
     private ArrayList<String> answerList;
     public HashMap<String, ArrayList<String>> dict = new HashMap<>();
@@ -50,6 +50,7 @@ public class Question extends ThompsonTemplate{
         radioButtonList = new ArrayList<>();
         answerList = new ArrayList<>();
         answerState = false;
+        isLast = false;
         //dictSetUp(textFieldList, checkBoxList, radioButtonList, answerList);
         //Should be able to eliminate this due to ThompsonTemplate
         dict.put(questionTypes[0], textFieldList);
@@ -97,6 +98,7 @@ public class Question extends ThompsonTemplate{
         //Uses the question type to grab appropriate list, including answers
         return dict.get(type);
     }
+    public boolean isLastQ(){return this.isLast;}
     
     
     public void setQuestion(String inputText){
@@ -115,15 +117,18 @@ public class Question extends ThompsonTemplate{
         answerList = (ArrayList<String>) answers.clone();
         //use the validation tool to assign answerState
         answerState = valid.isValid(answers);
+        isLast = !valid.isValid(answers);
         return answerState;
     }
     public void setList(String type, String ... text){
         //Uses the question type to grab appropriate list, including answers
         dict.get(type).addAll(Arrays.asList(text));
     }
+    public void setLastState(boolean flag) {this.isLast = flag;}
     //method to write string as a line
     public String lineToWrite(String delim){
         String line = new String();
+        if (this.isLastQ()) line += LAST;
         line += name;
         for(String answer : answerList){
             line += (";" + answer);

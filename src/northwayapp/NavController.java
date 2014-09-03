@@ -84,10 +84,12 @@ public class NavController {
         }
         //ave it if possible
         if(saveable) drawer.getQuestion().setAnswer(tempStrings);
+        
         return saveable; //return if it saved
     }
     public void saveAndContinue(){
-        
+        this.save();
+        this.next();
     }
     //actions that do what I want
     class Next extends AbstractAction {
