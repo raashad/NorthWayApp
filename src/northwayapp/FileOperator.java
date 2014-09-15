@@ -7,7 +7,9 @@
 package northwayapp;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,7 +46,8 @@ public class FileOperator extends ThompsonTemplate{
         }
         if(flag && quoteNamesDict.containsKey(quoteSheet.getName())){
             fileName += quoteNamesDict.get(quoteSheet.getName());
-            notes = new File(fileName + ".txt");
+            this.setNotes(ext, fileName);
+            //notes = new File(fileName + ".txt");
             fileName += "." + ext;
             file = new File(fileName); //only set this file if it is valid
         }       
@@ -53,6 +56,11 @@ public class FileOperator extends ThompsonTemplate{
     }
     public boolean setFile(String ... inputs){
         return FileOperator.this.setFile("txt", inputs); //if no file extension is included
+    }
+    public boolean setNotes(String ext, String parentFileName){
+        notes = new File(parentFileName + "notes." + ext);
+        return true;
+
     }
     public boolean fileExists(){
         return file.isFile();
@@ -121,5 +129,37 @@ public class FileOperator extends ThompsonTemplate{
     }
     public String getFileName(){
         return file.getName();
+    }
+    public File getFile(){
+        return file;
+    }
+    public File getQuoteFile(){
+        return quoteSheet;
+    }
+    public File getNotesFile(){
+        return notes;
+    }
+    public String readNotes() throws FileNotFoundException{
+        String tempText = new String();
+        Scanner scanner = new Scanner(notes);
+        while(scanner.hasNextLine()){
+            tempText += scanner.nextLine() + "\n";
+        }
+        return tempText;
+    }
+    public void saveNotes(String... lines){
+        List<String> linesToWrite = new ArrayList<>();
+        for(String element:lines){
+            linesToWrite.add(element);
+        }
+        /*
+        OutputStream out = Files.newOutputStream(file.toPath());
+        for(Question question : this.getList()){
+          */
+        try {
+            Files.write(notes.toPath(), linesToWrite);
+        } catch (IOException ex) {
+            Logger.getLogger(Survey.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

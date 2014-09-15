@@ -82,7 +82,7 @@ public class NavController {
                 break;
                     
         }
-        //ave it if possible
+        //save it if possible
         if(saveable) drawer.getQuestion().setAnswer(tempStrings);
         
         return saveable; //return if it saved

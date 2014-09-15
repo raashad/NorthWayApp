@@ -7,8 +7,15 @@
 package northwayapp;
 
 import java.awt.CardLayout;
+import java.awt.Point;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
@@ -53,6 +60,11 @@ public class NorthwayApp extends javax.swing.JFrame {
             JPanel textP, JPanel fieldsP, JPanel navP){
         
         survey  = files.createSurvey();
+        try {
+            notebookText.setText(files.readNotes());
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(NorthwayApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
         drawer = new GUIDrawer(survey, textP, fieldsP, navP);
         CardLayout cl = (CardLayout)cardPanel.getLayout();
         cl.next(cardPanel);
@@ -75,6 +87,10 @@ public class NorthwayApp extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         notebook = new javax.swing.JDialog();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        notebookText = new javax.swing.JTextArea();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
         cardPanel = new javax.swing.JPanel();
         tempStartPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -96,6 +112,7 @@ public class NorthwayApp extends javax.swing.JFrame {
         fieldsPanel = new javax.swing.JPanel();
         navPanel = new javax.swing.JPanel();
         quoteHeaderLabel = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         jLabel6.setText("An Error has occured");
 
@@ -125,16 +142,46 @@ public class NorthwayApp extends javax.swing.JFrame {
         );
 
         notebook.setAlwaysOnTop(true);
+        notebook.setMinimumSize(new java.awt.Dimension(400, 500));
+
+        notebookText.setColumns(20);
+        notebookText.setRows(5);
+        jScrollPane1.setViewportView(notebookText);
+
+        jButton3.setText("Save");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("Save and Close");
 
         javax.swing.GroupLayout notebookLayout = new javax.swing.GroupLayout(notebook.getContentPane());
         notebook.getContentPane().setLayout(notebookLayout);
         notebookLayout.setHorizontalGroup(
             notebookLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(notebookLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, notebookLayout.createSequentialGroup()
+                .addContainerGap(210, Short.MAX_VALUE)
+                .addComponent(jButton3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton4)
+                .addGap(20, 20, 20))
         );
         notebookLayout.setVerticalGroup(
             notebookLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(notebookLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(notebookLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton3)
+                    .addComponent(jButton4))
+                .addContainerGap())
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -320,6 +367,13 @@ public class NorthwayApp extends javax.swing.JFrame {
         quoteHeaderLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         quoteHeaderLabel.setText("Quote Type");
 
+        jButton1.setText("Bring up notepad");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout surveyPanelLayout = new javax.swing.GroupLayout(surveyPanel);
         surveyPanel.setLayout(surveyPanelLayout);
         surveyPanelLayout.setHorizontalGroup(
@@ -335,7 +389,8 @@ public class NorthwayApp extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, surveyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(navPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 484, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(fieldsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(textPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(textPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addContainerGap())
         );
         surveyPanelLayout.setVerticalGroup(
@@ -349,7 +404,9 @@ public class NorthwayApp extends javax.swing.JFrame {
                 .addComponent(fieldsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(navPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(93, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addContainerGap())
         );
 
         cardPanel.add(surveyPanel, "card3");
@@ -368,7 +425,7 @@ public class NorthwayApp extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(cardPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         pack();
@@ -446,6 +503,23 @@ public class NorthwayApp extends javax.swing.JFrame {
     private void agentNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agentNameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_agentNameActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Point tempPoint = this.getLocation();
+        tempPoint.setLocation(tempPoint.getX() + this.getWidth(), tempPoint.getY());
+        notebook.setLocation(tempPoint);
+        notebook.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        try {
+            //this is clunky, found it on SOF, but it seems to work well
+            notebookText.write(new BufferedWriter(
+                    new FileWriter(twoFiles.getNotesFile())));
+        } catch (IOException ex) {
+            Logger.getLogger(NorthwayApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
     
     
     
@@ -499,7 +573,10 @@ public class NorthwayApp extends javax.swing.JFrame {
     private javax.swing.JPanel fieldsPanel;
     private javax.swing.JDialog fileCreationErrorDB;
     private javax.swing.JTextField fileExistsField;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -508,8 +585,10 @@ public class NorthwayApp extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel navPanel;
     private javax.swing.JDialog notebook;
+    private javax.swing.JTextArea notebookText;
     private javax.swing.JLabel quoteHeaderLabel;
     private javax.swing.JComboBox quotePicker;
     private javax.swing.JButton startSurveyButton;

@@ -113,6 +113,7 @@ public class Survey {
     }
     
     public void writeToFile(Path path){
+        this.determineLastQuestion();
         List<String> lines = new ArrayList<>();
         for(Question question : survey){
             lines.add(question.lineToWrite());
@@ -139,7 +140,7 @@ public class Survey {
         this.determineLastQuestion();
         return survey.get(i).isLastQ();
     }
-    public void determineLastQuestion(){
+    private void determineLastQuestion(){
         boolean lastFound = false;
         //start at index 1 and back set answerstate to avoid out of bounds
         for(int i = 1; i < this.survey.size(); i++){
