@@ -5,21 +5,64 @@
  */
 
 package northwayapp;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.util.*;
 import javax.swing.*;
-import java.awt.Component;
 /**
  *
  * @author Rashad
  */
 public class ThompsonTemplate {
+    //Constants to set sizes of fields
+    final int FIELDPANELSIZE = 500;
+    final int TEXTSIZE = 18;
+    final int FIELDTEXTSIZE = 14;
+    final int BOXWIDTH = 500;
+    final int BOXHEIGHT = FIELDTEXTSIZE + 20;
+    final int BUTTONWIDTH = 100; //Set the textsize used for outputs
+    final String FONTNAME = "Cambria";
+    //Font labelFont = new Font(FONTNAME, Font.PLAIN, TEXTSIZE);
+    //Font fieldFont = new Font(FONTNAME, Font.PLAIN, FIELDTEXTSIZE);
+    Font labelFont;
+    Font fieldFont;
+    JLabel labelLabel, fieldLabel;
+    //Graphics gLabel, gField;
+    FontMetrics metLabel, metField;
+    
+    public void setUpFontMetrics(){
+        this.labelFont = new Font(FONTNAME, Font.PLAIN, TEXTSIZE);
+        this.fieldFont = new Font(FONTNAME, Font.PLAIN, FIELDTEXTSIZE);
+        this.labelLabel = new JLabel();
+        this.fieldLabel = new JLabel();
+        this.labelLabel.setFont(labelFont);
+        this.fieldLabel.setFont(fieldFont);
+        this.metLabel = labelLabel.getFontMetrics(labelFont);
+        this.metField = fieldLabel.getFontMetrics(fieldFont);
+    }
+            
+    //This sets up the dictionary of quote types associated with lists
     public static String[] questionTypes = {
-        "TEXTFIELD", "CHECKBOX", "RADIOBUTTON", "ANSWERS"};
-    public HashMap<String, Object> dict = new HashMap<>();
+        "TEXTFIELD", "CHECKBOX", "RADIOBUTTON", "ANSWERS", "MULTITEXT"};
+    public HashMap<String, ArrayList<String>> qTypeDict = new HashMap<>();
     //used for quote file names
-    
-    
-    
+    ArrayList<String> textFieldList, checkBoxList, radioButtonList;
+    ArrayList<String> answerList;
+    public void qTypeDictSetUp(){
+        qTypeDict = new HashMap<>();
+        textFieldList = new ArrayList<>();
+        checkBoxList= new ArrayList<>();
+        radioButtonList = new ArrayList<>();
+        answerList = new ArrayList<>();
+        
+        qTypeDict.put(questionTypes[0], textFieldList);
+        qTypeDict.put(questionTypes[1], checkBoxList);
+        qTypeDict.put(questionTypes[2], radioButtonList);
+        qTypeDict.put(questionTypes[3], answerList);
+        qTypeDict.put(questionTypes[4], textFieldList);
+    }
     
     public final static String[] QUOTES = {
         "AUTO",
@@ -35,13 +78,8 @@ public class ThompsonTemplate {
     public HashMap<String, String> quoteFilesDict = new HashMap<>();
       
     public final static String LAST = "LAST";
-    
-    
-    
-    ValidationTool valid = new ValidationTool();
-    Class dictClass;
-    
-    
+    ValidationTool validator = new ValidationTool();
+       
     public void quoteNamesDictSetUp(){
         for(int i = 0; i < quoteFileNames.size(); i++){
             quoteNamesDict.put(QUOTE_FILES[i], QUOTES[i]);
@@ -51,46 +89,5 @@ public class ThompsonTemplate {
         for(int i = 0; i < quoteFileNames.size(); i++){
             quoteFilesDict.put(QUOTES[i], QUOTE_FILES[i]);
         }
+    }    
     }
-    // use this to populate the dictionary for any given class
-    public boolean dictSetUp(Object ... stuff){
-        try{ // try to set up hashmap
-            
-            
-            
-            //Convert the Hashmap to applicable type IT WONT LET ME DO THISSSS!!!!!!!!1
-          
-            
-            
-            
-            dictClass = stuff.getClass(); // holds class for dict
-            //dict = new HashMap<String, Class<dictClass>>();
-            int i = 0;
-            for(Object things : stuff){
-                dict.put(questionTypes[i], things);
-            }
-            return true;
-        } //catch if the objects passed go out of bounds of questionTypes
-        catch(ArrayIndexOutOfBoundsException e){
-            System.err.println(
-                    "Went out of bounds on questionTypes[]"+ e.getMessage());
-            return false;
-        }
-    }
-    
-    // just in case this object stuff doesnt work
-    public boolean dictSetUp(ArrayList<String> ... stuff){
-        try{ // try to set up hashmap
-            int i = 0;
-            for(ArrayList<String> things : stuff){
-                dict.put(questionTypes[i], things);
-            }
-            return true;
-        } //catch if the objects passed go out of bounds of questionTypes
-        catch(ArrayIndexOutOfBoundsException e){
-            System.err.println(
-                    "Went out of bounds on questionTypes[]"+ e.getMessage());
-            return false;
-        }
-    }
-}

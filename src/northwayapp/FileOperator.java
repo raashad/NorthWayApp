@@ -38,7 +38,7 @@ public class FileOperator extends ThompsonTemplate{
         boolean flag = true; //true unless proven false        
         String fileName = new String(); //used to collect the file names
         for(String element : inputs){
-            flag = validator.isValid(element); //is the string valid?
+            flag = validator.isValid(element); //is the string validator?
             fileName += element.toLowerCase(); //add string to fileName
             if(!flag) break; //if one of the strings is empty, break out
         }
@@ -46,7 +46,7 @@ public class FileOperator extends ThompsonTemplate{
             fileName += quoteNamesDict.get(quoteSheet.getName());
             notes = new File(fileName + ".txt");
             fileName += "." + ext;
-            file = new File(fileName); //only set this file if it is valid
+            file = new File(fileName); //only set this file if it is validator
         }       
         else file = null;
         return flag;

@@ -17,18 +17,25 @@ public class Question extends ThompsonTemplate{
     private String name, label, questionType, currentAnswer;
     private int position;
     private boolean answerState, isLast;
-    private ArrayList<String> textFieldList, checkBoxList, radioButtonList;
-    private ArrayList<String> answerList;
-    public HashMap<String, ArrayList<String>> dict = new HashMap<>();
-    /*//Should be able to eliminate this due to ThompsonTemplate
-    public String[] questionTypes = {
-        "TEXTFIELD", "CHECKBOX", "RADIOBUTTON", "ANSWERS"};
-    ValidationTool valid = new ValidationTool();
-    */    
+      
     
     //constructors
     public Question(){
         this("Test Label", "Text goes here");
+        qTypeDictSetUp();
+    }
+    public Question(String text, String type){
+        label = text;
+        questionType = type;
+        currentAnswer = "";
+        
+        answerState = false;
+        isLast = false;
+        qTypeDictSetUp();
+        //dictSetUp(textFieldList, checkBoxList, radioButtonList, answerList);
+        //Should be able to eliminate this due to ThompsonTemplate
+        
+        
     }
     public Question(String qName, String text, String type){
         this(text, type);
@@ -38,27 +45,12 @@ public class Question extends ThompsonTemplate{
     public Question(
             String qName, String text, String type, ArrayList<String> list){
         this(qName, text, type);
-        boolean flag = dict.get(type).addAll(list);        
+        if(validator.isValid(list)){
+            qTypeDict.get(type).addAll(list); 
+        } 
     }
     
-    public Question(String text, String type){
-        label = text;
-        questionType = type;
-        currentAnswer = "";
-        textFieldList = new ArrayList<>();
-        checkBoxList= new ArrayList<>();
-        radioButtonList = new ArrayList<>();
-        answerList = new ArrayList<>();
-        answerState = false;
-        isLast = false;
-        //dictSetUp(textFieldList, checkBoxList, radioButtonList, answerList);
-        //Should be able to eliminate this due to ThompsonTemplate
-        dict.put(questionTypes[0], textFieldList);
-        dict.put(questionTypes[1], checkBoxList);
-        dict.put(questionTypes[2], radioButtonList);
-        dict.put(questionTypes[3], answerList);
-        
-    }
+    
 
     /**
      * Used for question types that require a list of entry points.
@@ -68,10 +60,7 @@ public class Question extends ThompsonTemplate{
      * @param type is the question type
      * @param selectable either a button names or starter text for fields
      */
-    public Question(String text, String type, String ... selectable){
-        this(text, type);
-        dict.get(type).addAll(Arrays.asList(selectable));
-    }
+    
     
     
     
@@ -96,7 +85,7 @@ public class Question extends ThompsonTemplate{
     }
     public ArrayList<String> getList(String type){
         //Uses the question type to grab appropriate list, including answers
-        return dict.get(type);
+        return qTypeDict.get(type);
     }
     public boolean isLastQ(){return this.isLast;}
     
@@ -110,19 +99,19 @@ public class Question extends ThompsonTemplate{
     public boolean setAnswer(String answer){
         currentAnswer = answer;
         //use the validation tool to assign answerState
-        answerState = valid.isValid(answer);
+        answerState = validator.isValid(answer);
         return answerState;
     }
     public boolean setAnswer(ArrayList<String> answers){
         answerList = (ArrayList<String>) answers.clone();
         //use the validation tool to assign answerState
-        answerState = valid.isValid(answers);
-        isLast = !valid.isValid(answers);
+        answerState = validator.isValid(answers);
+        isLast = !validator.isValid(answers);
         return answerState;
     }
     public void setList(String type, String ... text){
         //Uses the question type to grab appropriate list, including answers
-        dict.get(type).addAll(Arrays.asList(text));
+        qTypeDict.get(type).addAll(Arrays.asList(text));
     }
     public void setLastState(boolean flag) {this.isLast = flag;}
     //method to write string as a line
