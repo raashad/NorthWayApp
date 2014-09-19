@@ -12,6 +12,7 @@ import javax.swing.*;
  *
  * @author Rashad
  */
+
 public class Question extends ThompsonTemplate{
     //declare variables
     private String name, label, questionType, currentAnswer;
