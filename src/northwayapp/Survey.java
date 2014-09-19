@@ -140,9 +140,13 @@ public class Survey {
         this.determineLastQuestion();
         return survey.get(i).isLastQ();
     }
-    private void determineLastQuestion(){
+    public void determineLastQuestion(){
         boolean lastFound = false;
         //start at index 1 and back set answerstate to avoid out of bounds
+        if(!this.survey.get(0).getAnswerState()){
+            this.survey.get(0).setLastState(true);
+            lastFound = true;
+        }
         for(int i = 1; i < this.survey.size(); i++){
             if (this.survey.get(i).getAnswerState()
                     || lastFound){

@@ -80,9 +80,19 @@ public class NavController {
                     }
                 }
                 break;
+            case "MULTITEXT":
+                //needs all valid fields
+                for(Component component : drawer.getInputPanel().getComponents()){
+                    if(component instanceof JTextField){
+                        tempStrings.add(((JTextField)component).getText());
+                    }
+                }
+                //saveable = validator.isValid(tempStrings);
+                saveable = validator.isValid(tempStrings);
+                break;
                     
         }
-        //save it if possible
+        //ave it if possible
         if(saveable) drawer.getQuestion().setAnswer(tempStrings);
         
         return saveable; //return if it saved

@@ -21,9 +21,8 @@ import javax.swing.*; //well, might have to remove the precursor in a lot
 public class GUIDrawer extends ThompsonTemplate{
     //declare objects
     private JPanel panel1, panel2, panel3; // Holds panels to draw in
-    int position;
-    final int TEXTSIZE, BOXWIDTH, BOXHEIGHT, BUTTONWIDTH; //Set the textsize used for outputs
-    final String FONTNAME;
+    int position, labelHeight, fieldHeight;
+    
     Question holdingQuestion;
     Survey survey;
     NavController navigator;
@@ -61,15 +60,20 @@ public class GUIDrawer extends ThompsonTemplate{
     }
     
     public GUIDrawer(JPanel pane1){
-        position = 0;
-        TEXTSIZE = 18;
-        FONTNAME = "VANI";
-        BOXWIDTH = 500;
-        BOXHEIGHT = 35;
-        BUTTONWIDTH = 100;
         labelFont = new Font(FONTNAME, Font.PLAIN, TEXTSIZE);
+        fieldFont = new Font(FONTNAME, Font.PLAIN, FIELDTEXTSIZE);
+        labelLabel = new JLabel();
+        fieldLabel = new JLabel();
+        labelLabel.setFont(labelFont);
+        fieldLabel.setFont(fieldFont);
+        metLabel = labelLabel.getFontMetrics(labelFont);
+        metField = fieldLabel.getFontMetrics(fieldFont);
+        labelHeight = metLabel.getHeight() + 10;
+        fieldHeight = metField.getHeight() + 10;
         
+        position = 0;
         panel1 = pane1;
+        
     }
     
     
@@ -104,7 +108,7 @@ public class GUIDrawer extends ThompsonTemplate{
         
         switch (toDraw.getType()) {
             case "TEXTFIELD":
-                Dimension dims = new Dimension(BOXWIDTH, BOXHEIGHT);
+                Dimension dims = new Dimension(BOXWIDTH, fieldHeight);
                 JTextField tempText = new JTextField(toDraw.getAnswer());
                 tempText.setAlignmentX(Component.LEFT_ALIGNMENT);
                 tempText.setPreferredSize(dims);
@@ -137,6 +141,29 @@ public class GUIDrawer extends ThompsonTemplate{
                         temp.setSelected(true);
                     }
                     pane2.add(temp);
+                }   break;
+                case "MULTITEXT":
+                int i = 0;
+                for(String element : toDraw.getList(toDraw.getType())){
+                    JLabel tempLabel = new JLabel(element);
+                    tempLabel.setFont(labelFont);
+                    JTextField tempField = new JTextField();
+                    tempField.setFont(fieldFont);
+                    tempField.setAlignmentX(Component.LEFT_ALIGNMENT);
+                    //clunky method to set width of textbox
+                    Dimension tempDims = new Dimension(
+                            (FIELDPANELSIZE 
+                            - (metLabel.stringWidth(tempLabel.getText())
+                            + metLabel.charWidth('c')*2)),
+                            fieldHeight);
+                    tempField.setPreferredSize(tempDims);
+                   
+                    pane2.add(tempLabel);
+                    pane2.add(tempField);
+                     if(toDraw.getAnswerState()){
+                        tempField.setText(toDraw.getAnswerList().get(i));
+                        i += 1;
+                    }
                 }   break;
         }
         panel2.revalidate();
