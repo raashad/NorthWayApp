@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
 import javax.swing.*; //well, might have to remove the precursor in a lot
+import northwayapp.NavController.Next;
 
 /**
  *
@@ -26,31 +27,19 @@ public class GUIDrawer extends ThompsonTemplate{
     Question holdingQuestion;
     Survey survey;
     NavController navigator;
+    NavController.Next nextAction;
     Font labelFont, fieldFont;
-    //public HashMap<String, ArrayList<String>> dict = new HashMap<>();
-    
-/*  I DONT THINK I NEED THESE!!!
-    //declare lists, and I'm initializing them here for fun
-    List<javax.swing.JCheckBox> checkBoxList;
-    List<javax.swing.JRadioButton> radioButtonList;
-    List<javax.swing.JTextField> textFieldList;
-    List<javax.swing.JLabel> labelList;
-    
-    this.labelList = new ArrayList<>();
-    this.textFieldList = new ArrayList<>();
-    this.radioButtonList = new ArrayList<>();
-    this.checkBoxList = new ArrayList<>();
-    
-*/    
+      
     //Constructors
     public GUIDrawer(Survey survey, JPanel pane1, JPanel pane2, JPanel pane3){
         this(pane1, pane2);
         this.survey = survey;
         panel3 = pane3;
         navigator = new NavController(this, survey, survey.getClientFileName());
-        //holdingQuestion = survey.get(position);
         position = this.survey.getLastQuestionIndex();
         drawQuestion();
+        //used to create an instance of the NavC innerclass Next
+        nextAction = navigator.new Next();
     }
     
     public GUIDrawer(JPanel pane1, JPanel pane2){
@@ -104,8 +93,10 @@ public class GUIDrawer extends ThompsonTemplate{
     }
     
     public void drawControl(Question toDraw, JPanel pane2){
+        panel2.requestFocusInWindow();
         panel2.removeAll();
-        
+        JTextField focusField = new JTextField();
+        JTextField lastField = new JTextField();
         switch (toDraw.getType()) {
             case "TEXTFIELD":
                 Dimension dims = new Dimension(BOXWIDTH, fieldHeight);
@@ -117,6 +108,8 @@ public class GUIDrawer extends ThompsonTemplate{
                     tempText.setText(toDraw.getAnswerList().get(0));
                 }
                 pane2.add(tempText);
+                focusField = tempText;
+                lastField = tempText;
                 break;
             case "CHECKBOX":
                 //for each element in the checkbox question list
@@ -160,14 +153,22 @@ public class GUIDrawer extends ThompsonTemplate{
                    
                     pane2.add(tempLabel);
                     pane2.add(tempField);
+                    if(i == 0) focusField = tempField;
+                    if(i == toDraw.getList(toDraw.getType()).size()-1){
+                        lastField = tempField;
+                    }
                      if(toDraw.getAnswerState()){
                         tempField.setText(toDraw.getAnswerList().get(i));
-                        i += 1;
                     }
+                    i += 1;
                 }   break;
         }
         panel2.revalidate();
         panel2.repaint();
+        focusField.requestFocus();
+        
+        
+        lastField.setAction(nextAction);
     }
     
     public void actionPerformed(ActionEvent evt){

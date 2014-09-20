@@ -67,11 +67,12 @@ public class NorthwayApp extends javax.swing.JFrame {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(NorthwayApp.class.getName()).log(Level.SEVERE, null, ex);
         }
-        drawer = new GUIDrawer(survey, textP, fieldsP, navP);
+        
         CardLayout cl = (CardLayout)cardPanel.getLayout();
         cl.next(cardPanel);
         quoteTypeLabel = quoteType.toUpperCase();
         quoteHeaderLabel.setText(quoteTypeLabel);
+        drawer = new GUIDrawer(survey, textP, fieldsP, navP);
     }
     
 
@@ -403,8 +404,8 @@ public class NorthwayApp extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(textPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(fieldsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fieldsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(navPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                 .addComponent(jButton1)
@@ -426,7 +427,7 @@ public class NorthwayApp extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(cardPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE)
+                .addComponent(cardPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
