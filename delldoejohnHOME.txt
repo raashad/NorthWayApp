@@ -1,7 +1,9 @@
-MultiTest;fdhaadhg;aahdfadg;sfhaafhadg
-MultiTest2;sfjag`zzz;gfsasgad;fgsjsgfjsadg
-Group;sfsfdhj
-Date;sgmm
-Name;sfdjsfjsg
-AirBags;None
-Coverage;None
+Group;real group
+Date;20/47/2047
+Name;Hugh Mann
+Email;real@web.site
+Basement;Yes
+Features;Deck
+LASTYearBuilt
+SQfootage
+Credits

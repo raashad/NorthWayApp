@@ -159,6 +159,11 @@ public class NorthwayApp extends javax.swing.JFrame {
         });
 
         jButton4.setText("Save and Close");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout notebookLayout = new javax.swing.GroupLayout(notebook.getContentPane());
         notebook.getContentPane().setLayout(notebookLayout);
@@ -358,7 +363,6 @@ public class NorthwayApp extends javax.swing.JFrame {
 
         textPanel.setLayout(new javax.swing.BoxLayout(textPanel, javax.swing.BoxLayout.X_AXIS));
 
-        fieldsPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         fieldsPanel.setNextFocusableComponent(navPanel);
         fieldsPanel.addContainerListener(new java.awt.event.ContainerAdapter() {
             public void componentAdded(java.awt.event.ContainerEvent evt) {
@@ -404,10 +408,10 @@ public class NorthwayApp extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(textPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(fieldsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(fieldsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(navPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addContainerGap())
         );
@@ -523,6 +527,17 @@ public class NorthwayApp extends javax.swing.JFrame {
             Logger.getLogger(NorthwayApp.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        try {
+            //this is clunky, found it on SOF, but it seems to work well
+            notebookText.write(new BufferedWriter(
+                    new FileWriter(twoFiles.getNotesFile())));
+            notebook.setVisible(false);
+        } catch (IOException ex) {
+            Logger.getLogger(NorthwayApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
     
     
     

@@ -65,7 +65,16 @@ public class GUIDrawer extends ThompsonTemplate{
         
     }
     
-    
+    public boolean isLastCopy(Question question){
+        boolean flag = false;
+        String repeater = question.getRepeaterPointer();
+        if(repeater != null){
+            int numReps = Integer.valueOf(survey.get(repeater).getAnswer());
+            int repPos = survey.getIndex(question.getName()) - survey.getIndex(repeater);
+            if(numReps == repPos) flag = true;
+        }
+        return flag;
+    }
     // 'get'ting methods
     public Question getQuestion(){
         return survey.get(position);
@@ -73,10 +82,29 @@ public class GUIDrawer extends ThompsonTemplate{
     public JPanel getInputPanel(){
         return panel2;
     }
+    public String getName(){
+        return survey.get(position).getName();
+    }
     public String getType(){
         return survey.get(position).getType();
     }
-    
+    public int getReps(){
+        String tempString;
+        try{
+            tempString = survey.get(position).getAnswerList().get(0);
+        }catch(IndexOutOfBoundsException e){
+            System.err.println("There's no answer yet");
+            tempString = Integer.toString(1);
+        }
+        if(validator.isValid(tempString)){
+            try{
+                return Integer.valueOf(tempString);
+            }catch (NumberFormatException e){
+                return 2;
+            }
+        }
+        else return 3;
+    }
     public void redraw(){
         drawQuestion();
     }
@@ -135,7 +163,7 @@ public class GUIDrawer extends ThompsonTemplate{
                     }
                     pane2.add(temp);
                 }   break;
-                case "MULTITEXT":
+            case "MULTITEXT":
                 int i = 0;
                 for(String element : toDraw.getList(toDraw.getType())){
                     JLabel tempLabel = new JLabel(element);
@@ -162,6 +190,19 @@ public class GUIDrawer extends ThompsonTemplate{
                     }
                     i += 1;
                 }   break;
+            case "REPEATER":
+                int startingInt = 1;
+                if(toDraw.getAnswerState()){
+                    startingInt = Integer.valueOf(toDraw.getAnswerList().get(0));
+                }
+                int arraySize = 5;
+                String[] choices = new String[arraySize];
+                for (int x = 0; x < arraySize; x++){
+                    choices[x] = String.valueOf(startingInt + x);
+                }
+                JComboBox cb = new JComboBox(choices);
+                pane2.add(cb);
+                break;
         }
         panel2.revalidate();
         panel2.repaint();
@@ -178,6 +219,9 @@ public class GUIDrawer extends ThompsonTemplate{
     public void drawNavButtons(JPanel pane){
         pane.removeAll();
         pane.add(navigator.drawPrevious());
+        /*if(getQuestion().getRepeaterPointer() != null){
+            pane.add(navigator.drawRemoveQuestion());
+        }*/
         pane.add(navigator.drawUndo());
         pane.add(navigator.drawNext());
                
@@ -200,4 +244,31 @@ public class GUIDrawer extends ThompsonTemplate{
         drawQuestion();
     }
     
+    class RemoveRepeatedQuestion extends AbstractAction{
+        int indexToRemove = -1;
+        public RemoveRepeatedQuestion(){
+            super("DELETE");
+            indexToRemove = position;
+        }
+        public RemoveRepeatedQuestion(int idx){
+            this();
+            indexToRemove = idx;
+        }
+        
+        @Override
+        public void actionPerformed(ActionEvent e){
+            try{
+                if(survey.remove(indexToRemove)){}
+                else{
+                    JOptionPane.showMessageDialog(panel2, 
+                            "This is probably the only one...", 
+                            "Can't remove question", 
+                            JOptionPane.WARNING_MESSAGE);
+                        
+                }
+            }catch(NullPointerException a){
+                System.err.println("RemoveRepeatedQuestion action is not pointing at anything" + a.getMessage());
+            }
+        }
+    }
 }

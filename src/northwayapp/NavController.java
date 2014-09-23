@@ -90,9 +90,24 @@ public class NavController {
                 //saveable = validator.isValid(tempStrings);
                 saveable = validator.isValid(tempStrings);
                 break;
+            case "REPEATER":
+                for(Component component : drawer.getInputPanel().getComponents()){
+                    if(component instanceof JComboBox){
+                        String tempValue = (String)((JComboBox)component).getSelectedItem();
+                        int tempInt = Integer.valueOf(tempValue);
+                        tempStrings.add(tempValue);
+                        int repeaterIdx = survey.getIndex(drawer.getName());
+                        String repeaterName = drawer.getName();
+                        int copyIndex = repeaterIdx + 1;
+                        int currentReps = drawer.getReps();
+                        int newReps = tempInt;
+                        survey.repeatQuestion(repeaterName, copyIndex, currentReps, newReps);
+                    }
+                saveable = true;
+                } break;
                     
         }
-        //ave it if possible
+        //save it if possible
         if(saveable) drawer.getQuestion().setAnswer(tempStrings);
         
         return saveable; //return if it saved
@@ -151,6 +166,11 @@ public class NavController {
     public JButton drawUndo(){
         JButton temp = new JButton();
         temp.setAction(new ReDraw("Undo"));
+        return temp;
+    }
+    public JButton drawRemoveQuestion(){
+        JButton temp = new JButton();
+        temp.setAction(drawer.new RemoveRepeatedQuestion());
         return temp;
     }
 }

@@ -32,7 +32,7 @@ public class ThompsonTemplate {
     JLabel labelLabel, fieldLabel;
     //Graphics gLabel, gField;
     FontMetrics metLabel, metField;
-    ArrayList<String> textFieldList, checkBoxList, radioButtonList, answerList;
+    ArrayList<String> textFieldList, checkBoxList, radioButtonList, answerList, fieldsList;
     int repeaterNumber;
     
     /**
@@ -63,12 +63,13 @@ public class ThompsonTemplate {
         checkBoxList= new ArrayList<>();
         radioButtonList = new ArrayList<>();
         answerList = new ArrayList<>();
+        fieldsList = new ArrayList<>();
     
-        qTypeDict.put(questionTypes[0], textFieldList);
-        qTypeDict.put(questionTypes[1], checkBoxList);
-        qTypeDict.put(questionTypes[2], radioButtonList);
+        qTypeDict.put(questionTypes[0], fieldsList);
+        qTypeDict.put(questionTypes[1], fieldsList);
+        qTypeDict.put(questionTypes[2], fieldsList);
         qTypeDict.put(questionTypes[3], answerList);
-        qTypeDict.put(questionTypes[4], textFieldList);
+        qTypeDict.put(questionTypes[4], fieldsList);
     }
     
     public final static String[] QUOTES = {

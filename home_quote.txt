@@ -1,7 +1,9 @@
-MultiTest;test;MULTITEXT;Field1;field 2;"Field the third"
-MultiTest2;test2;MULTITEXT;Field1;field 2;"Field the third"
 Group;Group;TEXTFIELD
 Date;Date (MM/DD/YYYY);TEXTFIELD
 Name;Name;TEXTFIELD
-AirBags;What Air Bag protection does the vehicle have?;CHECKBOX;Drivers;Both;With Side;None
-Coverage;What coverage does the vehicle want?;RADIOBUTTON;Comprehensive;Collision Broad;Collision Standard;None
+Email;Email Address;TEXTFIELD
+Basement;HOME INFO: Basement;RADIOBUTTON;Yes;No
+Features;HOME INFO: Other features;CHECKBOX;Woodstove;Deck;Porch;Central Air
+YearBuilt;HOME INFO: Year Built;TEXTFIELD
+SQfootage;HOME INFO: Square footage;TEXTFIELD
+Credits;Homeowner Credits;CHECKBOX;Non smoker;Deadbolt;Fire Exit;Smoke Detector;Local Alarm;Central Alarm

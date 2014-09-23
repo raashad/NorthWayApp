@@ -39,6 +39,7 @@ public class Survey {
         //This one takes one question and adds it to survey
         survey = new ArrayList<>(); //remove if initialized at top
         survey.add(singleQuestion);
+        names = new ArrayList<>();
         //getNamesFromList();
     }
     public Survey(File file, File answerFile){
@@ -59,6 +60,7 @@ public class Survey {
          * by using a Question method to convert the lines of the text file
          * into Questions
          */
+        names = new ArrayList<>();
         try{
             survey = new ArrayList<>();
             file = new File(fileName);
@@ -80,6 +82,9 @@ public class Survey {
             this.blankSurvey();
             
         }
+        
+        this.getNamesFromList();
+        
     }
     private void blankSurvey(){
         this.survey = new ArrayList<>();
@@ -106,8 +111,12 @@ public class Survey {
                 else{
                     //all of this is to refactor the list if there is a repeated
                     //question that shows up. Necessary even if it's not answered.
-                    if(this.get(i).getType() == "REPEATER"){
-                        int numberOfQuestion;
+                    if(this.get(i).getType().equals("REPEATER")){
+                        repeatQuestion(this.get(i).getName(), 
+                                i+1, 
+                                1, 
+                                Integer.valueOf(this.get(i).getAnswer()));
+                        /*int numberOfQuestion;
                         try{
                             numberOfQuestion = Integer.parseInt(
                                     this.get(i).getAnswer());
@@ -123,7 +132,8 @@ public class Survey {
                             tempList.add(tempQuestion);
                         }
                         this.get(i+1).addIntToName(1);
-                        this.survey.addAll(i+2, tempList);
+                        this.survey.addAll(i+2, tempList);*/
+                        
                     }
                     i += 1;
                 }
@@ -136,7 +146,41 @@ public class Survey {
                     "Something wrong with Survey scanner (probably): " + e.getMessage());
         }
     }
-    
+    public void repeatQuestion(String repeaterName, int idx, int currentReps, int newReps){
+        Question copyingQuestion = this.get(idx).clone();
+        List<Question> questionsToAdd = new ArrayList<>();
+        for(int i = currentReps; i < newReps; i++){
+            questionsToAdd.add(copyingQuestion.clone());
+        }
+        this.survey.addAll(idx+currentReps, questionsToAdd);
+        refactorNames(idx, newReps, repeaterName);
+        /*for(int i = 0; i < newReps; i++){
+            this.survey.get(idx + i).addIntToName(i+1);
+            this.survey.get(idx + i).setQuestion(this.survey.get(idx + i).getName());
+        }*/
+        this.getNamesFromList();
+    }
+
+    /**
+     *firstIdx used to locate first question that is repeated, while reps tells
+     * how many repetitions there are in order to rename questions
+     * @param firstIdx
+     * @param reps
+     */
+    public void refactorNames(int firstIdx, int reps){
+        for(int i = 0; i < reps; i++){
+            
+            String newName = this.survey.get(firstIdx + i).addIntToName(i+1);
+            this.survey.get(firstIdx + i).setQuestion(newName);
+        }
+        this.getNamesFromList();
+    }
+    public void refactorNames(int firstIdx, int reps, String repeaterName){
+        refactorNames(firstIdx, reps);
+        for(int i = 0; i < reps; i++){
+            this.survey.get(firstIdx + i).setRepeaterPointer(repeaterName);
+        }
+    }
     private void getNamesFromList(){
         /*iterates through question list to 
          *grab the question names and adds
@@ -146,6 +190,9 @@ public class Survey {
         for (Question element : survey) {
             names.add(element.getName());
         }
+        /*for(String name:names){
+            System.out.println(name);
+        }*/
     }
     
     private void addQuestion(Question question){
@@ -154,9 +201,45 @@ public class Survey {
     public ArrayList<Question> getList(){
         return (ArrayList<Question>)survey;
     }
-    
+
+    /**
+     *If idx points at a question that is part of a set of repeated questions
+     * with a repeater pointer, and the repeater question can be decreased by 1,
+     * it is decreased and the question is removed from the list. Then the
+     * names of the repeated questions are refactored and the namesList is
+     * refreshed. Returned boolean informs whether it can be/was removed.
+     * @param idx
+     * @return
+     */
+    public boolean remove(int idx) throws NullPointerException{
+        boolean flag = false;
+        String repeater = this.survey.get(idx).getRepeaterPointer();
+        if(repeater != null && this.get(repeater).decrementRepeater()){
+            this.survey.remove(idx);
+            this.refactorNames(this.getIndex(repeater)+1, this.get(repeater).getRepeaterInt());
+            this.getNamesFromList();
+            flag = true;
+        }
+        return flag;
+    }
     public Question get(int i){
         return survey.get(i);
+    }
+    public Question get(String qName){
+        int idx = 0;
+        for(int i = 0; i < survey.size(); i++){
+            idx = i;
+            if(survey.get(i).getName() == qName) break;
+        }
+        return this.get(idx);
+    }
+    public int getIndex(String qName){
+        int idx = 0;
+        for(int i = 0; i < survey.size(); i++){
+            idx = i;
+            if(survey.get(i).getName() == qName) break;
+        }
+        return idx;
     }
     public String getClientFileName(){
         return clientFile.getPath();
@@ -164,7 +247,6 @@ public class Survey {
     public int size(){
         return survey.size();
     }
-    
     public void writeToFile(Path path){
         this.determineLastQuestion();
         List<String> lines = new ArrayList<>();

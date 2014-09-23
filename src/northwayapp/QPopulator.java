@@ -84,12 +84,13 @@ public class QPopulator extends ThompsonTemplate{
         tempList2 = new ArrayList<>(tempList.subList(1, tempList.size()));
         
         //check if it is the right question to be answering
-        if(valid.isNotEmpty(tempList2) 
-                && tempList.get(0).equals(question.getName())){
+        //&& tempList.get(0).equals(question.getName())
+        //no longer checking question name because of repeated questions
+        if(valid.isNotEmpty(tempList2)){
             //not sure if this will work, since I'm not cloning the list...
             question.setAnswer(tempList2);
             return true;
         }
         else return false;
-    }
+        }
 }

@@ -15,7 +15,7 @@ import javax.swing.*;
 
 public class Question extends ThompsonTemplate{
     //declare variables
-    private String name, label, questionType, currentAnswer;
+    private String name, label, questionType, currentAnswer, repeater, defaultName;
     private int position;
     private boolean answerState, isLast;
       
@@ -29,14 +29,15 @@ public class Question extends ThompsonTemplate{
         label = text;
         questionType = type;
         currentAnswer = "";
-        
+        repeater = null;
         answerState = false;
         isLast = false;
         qTypeDictSetUp();
     }
     public Question(String qName, String text, String type){
         this(text, type);
-        name = qName;  
+        name = qName;
+        defaultName = qName;
     }
     //accepts all the info separately, with an arrayList for the last arg
     public Question(
@@ -46,7 +47,13 @@ public class Question extends ThompsonTemplate{
             qTypeDict.get(type).addAll(list); 
         } 
     }
-    
+    @Override
+    public Question clone(){
+        return new Question(this.defaultName, 
+                this.label, 
+                this.questionType, 
+                this.fieldsList);
+    }
     
     
     //methods to get and set vars
@@ -54,7 +61,10 @@ public class Question extends ThompsonTemplate{
         return label;
     }
     public String getAnswer(){
-        return currentAnswer;
+        if(answerList.size() > 0){
+            return answerList.get(0);
+        }
+        else return null;
     }
     public ArrayList<String> getAnswerList(){
         return answerList;
@@ -62,11 +72,22 @@ public class Question extends ThompsonTemplate{
     public boolean getAnswerState(){
         return answerState;
     }
+    public int getRepeaterInt(){
+        int tempInt = -1;
+        if(questionType == "REPEATER"){
+            if(answerState) tempInt = Integer.valueOf(getAnswer());
+            else tempInt = 1;
+        }
+        return tempInt;
+    }
     public String getType(){
         return questionType;
     }
     public String getName(){
         return name;
+    }
+    public String getRepeaterPointer(){
+        return repeater;
     }
     public ArrayList<String> getList(String type){
         //Uses the question type to grab appropriate list, including answers
@@ -77,8 +98,9 @@ public class Question extends ThompsonTemplate{
     public void setName(String inputText){
         this.name = inputText;
     }
-    public void addIntToName(int i){
-        this.name = this.name + " " + Integer.toString(i);
+    public String addIntToName(int i){
+        this.name = this.defaultName + " " + Integer.toString(i);
+        return this.name;
     }
     public void setQuestion(String inputText){
         label = inputText;
@@ -88,6 +110,8 @@ public class Question extends ThompsonTemplate{
     }
     public boolean setAnswer(String answer){
         currentAnswer = answer;
+        answerList = new ArrayList<>();
+        answerList.add(answer);
         //use the validation tool to assign answerState
         answerState = validator.isValid(answer);
         return answerState;
@@ -104,6 +128,25 @@ public class Question extends ThompsonTemplate{
         qTypeDict.get(type).addAll(Arrays.asList(text));
     }
     public void setLastState(boolean flag) {this.isLast = flag;}
+    public void setRepeaterPointer(String repeaterName){
+        repeater = repeaterName;
+    }
+
+    /**
+     *decreases the answer for a repeater type question by one. If it can't be
+     * decreased, either due to not being a number, or not being to drop below
+     * 1, false is returned.
+     * @return
+     */
+    public boolean decrementRepeater(){
+        boolean flag = false;
+        int tempInt = this.getRepeaterInt() - 1;
+        if(tempInt > 0){
+            this.setAnswer(Integer.toString(tempInt));
+            flag = true;
+        }
+        return flag;
+    }
     //method to write string as a line
     public String lineToWrite(String delim){
         String line = new String();
@@ -117,8 +160,5 @@ public class Question extends ThompsonTemplate{
     public String lineToWrite(){
         return this.lineToWrite(";");
     }
-    public Question clone(){
-        //may need to write more appropriate cloning method if this doesnt work
-        return this;
-    }
+    
 }

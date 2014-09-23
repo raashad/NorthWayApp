@@ -1,16 +1,13 @@
-LASTGroup
-Date
-Name
-Email
-D1Name
-D1DOB
-D2Name
-D2DOB
-V1YMM
-V1ABS
-V1Airbags
-V1Coverage
-V2YMM
-V2ABS
-V2Airbags
-V2Coverage
+Group;car group
+Date;today
+Name;yesterday
+NumDrivers;2
+Driver 1;1;3;4;5
+Driver 2;lady person;1800;4;100
+NumVehicles;3
+Vehicle 1;care 1;tldr
+LASTVehicle 2
+Vehicle 3
+Other
+AirBags
+Coverage
