@@ -1,3 +1,5 @@
+MultiTest;test;MULTITEXT;Field1;field 2;"Field the third"
+MultiTest2;test2;MULTITEXT;Field1;field 2;"Field the third"
 Group;Group;TEXTFIELD
 Date;Date (MM/DD/YYYY);TEXTFIELD
 Name;Name;TEXTFIELD

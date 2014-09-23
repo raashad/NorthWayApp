@@ -24,11 +24,24 @@ public class QPopulator extends ThompsonTemplate{
     public QPopulator(){
         this(";");
     }
+
+    /**
+     *Uses the delimiter string to determine how to break up the lines that
+     * are input to populate questions
+     * @param delimiter
+     */
     public QPopulator(String delimiter){
         delim = "[" + delimiter + "]";
-    }
-    public Question populate(String textLine){
         valid = new ValidationTool();
+    }
+
+    /**
+     *textLine (usually from quote file) is parsed and passed to Question
+     * constructor, which is returned.
+     * @param textLine
+     * @return
+     */
+    public Question populate(String textLine){
         tempList = new ArrayList<>();
         tempList2 = new ArrayList<>();
         tempList.addAll(Arrays.asList(textLine.split(delim)));
@@ -45,11 +58,22 @@ public class QPopulator extends ThompsonTemplate{
                 tempList2);
         }
         else return new Question(
-            tempList.get(0), tempList.get(1), tempList.get(2));
+            tempList.get(0), tempList.get(1), (String)tempList.get(2));
     }
     // returns a boolean to tell if we should keep
-    public boolean populateAnswer(String textLine, Question question){
-        valid = new ValidationTool();
+
+    /**
+     * textLine (usually passed from lines of a text file) are parsed based on
+     * internal delimiter. Sets lastState as appropriate. Checks question name
+     * against name in the file, and if they match, it passes the rest of the
+     * ArrayList to Question.setAnswer. Returns false if there is nothing to
+     * pass or if the name is wrong.
+     * @param textLine
+     * @param question
+     * @return
+     */
+        public boolean populateAnswer(String textLine, Question question){
+        
         tempList = new ArrayList<>();
         tempList.addAll(Arrays.asList(textLine.split(delim)));
         if (tempList.get(0).equals(LAST)){

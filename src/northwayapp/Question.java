@@ -22,7 +22,7 @@ public class Question extends ThompsonTemplate{
     
     //constructors
     public Question(){
-        this("Test Label", "Text goes here");
+        this("Temporary Name" ,"Test Label", "Text goes here");
         qTypeDictSetUp();
     }
     public Question(String text, String type){
@@ -33,10 +33,6 @@ public class Question extends ThompsonTemplate{
         answerState = false;
         isLast = false;
         qTypeDictSetUp();
-        //dictSetUp(textFieldList, checkBoxList, radioButtonList, answerList);
-        //Should be able to eliminate this due to ThompsonTemplate
-        
-        
     }
     public Question(String qName, String text, String type){
         this(text, type);
@@ -50,18 +46,6 @@ public class Question extends ThompsonTemplate{
             qTypeDict.get(type).addAll(list); 
         } 
     }
-    
-    
-
-    /**
-     * Used for question types that require a list of entry points.
-     * Uses a dictionary mapping the question type to the list that will
-     * contain those elements
-     * @param text is the text of the question
-     * @param type is the question type
-     * @param selectable either a button names or starter text for fields
-     */
-    
     
     
     
@@ -90,7 +74,12 @@ public class Question extends ThompsonTemplate{
     }
     public boolean isLastQ(){return this.isLast;}
     
-    
+    public void setName(String inputText){
+        this.name = inputText;
+    }
+    public void addIntToName(int i){
+        this.name = this.name + " " + Integer.toString(i);
+    }
     public void setQuestion(String inputText){
         label = inputText;
     }
@@ -127,5 +116,9 @@ public class Question extends ThompsonTemplate{
     }
     public String lineToWrite(){
         return this.lineToWrite(";");
+    }
+    public Question clone(){
+        //may need to write more appropriate cloning method if this doesnt work
+        return this;
     }
 }

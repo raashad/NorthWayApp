@@ -32,7 +32,12 @@ public class ThompsonTemplate {
     JLabel labelLabel, fieldLabel;
     //Graphics gLabel, gField;
     FontMetrics metLabel, metField;
+    ArrayList<String> textFieldList, checkBoxList, radioButtonList, answerList;
+    int repeaterNumber;
     
+    /**
+     *Initializes the label and field font, and the corresponding FontMetrics
+     */
     public void setUpFontMetrics(){
         this.labelFont = new Font(FONTNAME, Font.PLAIN, TEXTSIZE);
         this.fieldFont = new Font(FONTNAME, Font.PLAIN, FIELDTEXTSIZE);
@@ -43,14 +48,15 @@ public class ThompsonTemplate {
         this.metLabel = labelLabel.getFontMetrics(labelFont);
         this.metField = fieldLabel.getFontMetrics(fieldFont);
     }
-            
-    //This sets up the dictionary of quote types associated with lists
+
+    /**
+     *This sets up the dictionary of quote types associated with lists
+     */
     public static String[] questionTypes = {
-        "TEXTFIELD", "CHECKBOX", "RADIOBUTTON", "ANSWERS", "MULTITEXT"};
+        "TEXTFIELD", "CHECKBOX", "RADIOBUTTON", "ANSWERS", "MULTITEXT", "REPEATER"};
     public HashMap<String, ArrayList<String>> qTypeDict = new HashMap<>();
     //used for quote file names
-    ArrayList<String> textFieldList, checkBoxList, radioButtonList;
-    ArrayList<String> answerList;
+    
     public void qTypeDictSetUp(){
         qTypeDict = new HashMap<>();
         textFieldList = new ArrayList<>();

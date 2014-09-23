@@ -105,6 +105,12 @@ public class FileOperator extends ThompsonTemplate{
             return false;
         }
     }
+
+    /**
+     *Returns a survey object that is populated from the files
+     * generated in the FileOperator constructor
+     * @return
+     */
     public Survey createSurvey(){
         if(quoteSheet.isFile() && file.isFile()){
             return new Survey(quoteSheet, file);

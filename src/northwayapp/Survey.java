@@ -22,10 +22,13 @@ import java.util.logging.Logger;
 public class Survey {
     //declare variables and lists
     List<String> names;
-    List<Question> survey = new ArrayList<Question>(); //DO I NEED TO INITIALIZE???
+    List<Question> survey = new ArrayList<>();
     QPopulator creationTool;
     File file, clientFile;
     //Constructors
+    private Survey(){
+        this(new Question());
+    }
     public Survey(ArrayList<Question> questionList){
         //This one takes in a list of questions
         survey = questionList; //just points survey to the passed list
@@ -41,6 +44,16 @@ public class Survey {
     public Survey(File file, File answerFile){
         this(file.getPath(), answerFile.getPath());
     }
+
+    /**
+     * Most useful constructor, generates the blank survey by accessing quote
+     * file and adding the questions to the list that QPoupulator returns
+     * line by line. Then fills in saved answers using the internal method
+     * getWrittenAnswers(). Returns a survey with one placeholder question
+     * if something fails along the way.
+     * @param fileName
+     * @param clientFileName
+     */
     public Survey(String fileName, String clientFileName){
         /* this one will take a text file name and then populate survey
          * by using a Question method to convert the lines of the text file
@@ -53,7 +66,8 @@ public class Survey {
             creationTool = new QPopulator();
             //need to determine
             while(scanner.hasNextLine()){
-                survey.add(creationTool.populate(scanner.nextLine()));
+                Question tempQuestion = creationTool.populate(scanner.nextLine());
+                survey.add(tempQuestion);
             }
             scanner.close();
             
@@ -63,9 +77,21 @@ public class Survey {
         catch(FileNotFoundException e){
             System.err.println(
                     "Caught FileNotFoundException: " + e.getMessage());
+            this.blankSurvey();
+            
         }
     }
-    
+    private void blankSurvey(){
+        this.survey = new ArrayList<>();
+        this.addQuestion(new Question());
+    }
+    /**
+     * Sets up a scanner to read a file line by line to import answers for an
+     * initialized survey. If a repeater type question is encountered, it will
+     * add copies of the next question to the survey before continuing to scan
+     * through the answer file.
+     * @param answerFile
+     */
     public void getWrittenAnswers(File answerFile){
         try{
             Scanner scanner = new Scanner(answerFile);
@@ -76,14 +102,38 @@ public class Survey {
                         scanner.nextLine(), this.get(i))){
                     break;
                 }
-                else i += 1;
+                
+                else{
+                    //all of this is to refactor the list if there is a repeated
+                    //question that shows up. Necessary even if it's not answered.
+                    if(this.get(i).getType() == "REPEATER"){
+                        int numberOfQuestion;
+                        try{
+                            numberOfQuestion = Integer.parseInt(
+                                    this.get(i).getAnswer());
+                        } catch(NumberFormatException e){
+                            System.err.println(
+                                "Caught NumberFormatException: " + e.getMessage());
+                            numberOfQuestion = 1;
+                        }
+                        ArrayList<Question> tempList = new ArrayList<>();
+                        for(int x = 2; x <= numberOfQuestion; x++){
+                            Question tempQuestion = (Question)(this.get(i+1).clone());
+                            tempQuestion.addIntToName(x);
+                            tempList.add(tempQuestion);
+                        }
+                        this.get(i+1).addIntToName(1);
+                        this.survey.addAll(i+2, tempList);
+                    }
+                    i += 1;
+                }
             }
             scanner.close();
-            
+            this.getNamesFromList();
         }
         catch(FileNotFoundException e){
             System.err.println(
-                    "Caught FileNotFoundException: " + e.getMessage());
+                    "Something wrong with Survey scanner (probably): " + e.getMessage());
         }
     }
     
@@ -98,6 +148,9 @@ public class Survey {
         }
     }
     
+    private void addQuestion(Question question){
+        this.survey.add(question);
+    }
     public ArrayList<Question> getList(){
         return (ArrayList<Question>)survey;
     }
