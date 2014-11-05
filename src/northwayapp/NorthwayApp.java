@@ -352,7 +352,7 @@ public class NorthwayApp extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        cardPanel.add(tempStartPanel, "card2");
+        cardPanel.add(tempStartPanel, "tempStartCard");
 
         surveyPanel.setNextFocusableComponent(fieldsPanel);
         surveyPanel.addContainerListener(new java.awt.event.ContainerAdapter() {
@@ -416,7 +416,7 @@ public class NorthwayApp extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        cardPanel.add(surveyPanel, "card3");
+        cardPanel.add(surveyPanel, "surveyCard");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
