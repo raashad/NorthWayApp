@@ -72,7 +72,7 @@ public class NorthwayApp extends javax.swing.JFrame {
         cl.next(cardPanel);
         quoteTypeLabel = quoteType.toUpperCase();
         quoteHeaderLabel.setText(quoteTypeLabel);
-        drawer = new GUIDrawer(survey, textP, fieldsP, navP);
+        drawer = new GUIDrawer(survey, textP, fieldsP, navP, navComboBox);
     }
     
 
@@ -116,6 +116,8 @@ public class NorthwayApp extends javax.swing.JFrame {
         navPanel = new javax.swing.JPanel();
         quoteHeaderLabel = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        navComboBox = new javax.swing.JComboBox();
+        jLabel7 = new javax.swing.JLabel();
 
         jLabel6.setText("An Error has occured");
 
@@ -361,14 +363,18 @@ public class NorthwayApp extends javax.swing.JFrame {
             }
         });
 
+        textPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         textPanel.setLayout(new javax.swing.BoxLayout(textPanel, javax.swing.BoxLayout.X_AXIS));
 
+        fieldsPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         fieldsPanel.setNextFocusableComponent(navPanel);
         fieldsPanel.addContainerListener(new java.awt.event.ContainerAdapter() {
             public void componentAdded(java.awt.event.ContainerEvent evt) {
                 fieldsPanelComponentAdded(evt);
             }
         });
+
+        navPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         quoteHeaderLabel.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         quoteHeaderLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -381,32 +387,50 @@ public class NorthwayApp extends javax.swing.JFrame {
             }
         });
 
+        navComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        navComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                navComboBoxActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("Quick Navigation");
+
         javax.swing.GroupLayout surveyPanelLayout = new javax.swing.GroupLayout(surveyPanel);
         surveyPanel.setLayout(surveyPanelLayout);
         surveyPanelLayout.setHorizontalGroup(
             surveyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(surveyPanelLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(surveyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, surveyPanelLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(quoteHeaderLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(navComboBox, 0, 95, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(textPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, surveyPanelLayout.createSequentialGroup()
-                        .addGap(0, 115, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(surveyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, surveyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(navPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 484, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(fieldsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(textPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING))))
+                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, surveyPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(quoteHeaderLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         surveyPanelLayout.setVerticalGroup(
             surveyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(surveyPanelLayout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addComponent(quoteHeaderLabel)
+                .addGroup(surveyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(quoteHeaderLabel)
+                    .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(textPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(surveyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(textPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(navComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(fieldsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -538,6 +562,12 @@ public class NorthwayApp extends javax.swing.JFrame {
             Logger.getLogger(NorthwayApp.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void navComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_navComboBoxActionPerformed
+        //drawer.jumpTo((String)(navComboBox.getSelectedItem()));
+        String tempString = (String)navComboBox.getSelectedItem();
+        drawer.jumpTo(tempString);
+    }//GEN-LAST:event_navComboBoxActionPerformed
     
     
     
@@ -601,9 +631,11 @@ public class NorthwayApp extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JComboBox navComboBox;
     private javax.swing.JPanel navPanel;
     private javax.swing.JDialog notebook;
     private javax.swing.JTextArea notebookText;

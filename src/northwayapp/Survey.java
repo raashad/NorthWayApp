@@ -194,6 +194,19 @@ public class Survey {
             System.out.println(name);
         }*/
     }
+
+    /**
+     * Returns a String list of names that run from the first to the question
+     * that is currently marked as LAST (inclusive). If no question is last
+     * then it returns the name of the first question.
+     * @return
+     */
+    public List<String> getJumpableNames(){
+        this.getNamesFromList();
+        List<String> tempList = new ArrayList<>();
+        tempList = names.subList(0, this.getLastQuestionIndex()+1);
+        return tempList;
+    }
     
     private void addQuestion(Question question){
         this.survey.add(question);

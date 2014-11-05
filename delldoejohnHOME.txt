@@ -4,6 +4,6 @@ Name;Hugh Mann
 Email;real@web.site
 Basement;Yes
 Features;Deck
-LASTYearBuilt
-SQfootage
+YearBuilt;1839
+LASTSQfootage
 Credits

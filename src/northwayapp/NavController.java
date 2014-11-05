@@ -24,9 +24,11 @@ public class NavController {
     ValidationTool validator;
     String clientFile;
     
+    
     public NavController(GUIDrawer drawer, Survey survey, String clientFile){
         this(drawer, survey);
         this.clientFile = clientFile;
+
     }
     public NavController(GUIDrawer drawer, Survey survey){
         this.drawer = drawer;
@@ -39,6 +41,24 @@ public class NavController {
     }
     public void previous(){
         drawer.increment(-1);
+    }
+    public void jumpTo(int i){
+        drawer.jumpTo(i);
+    }
+
+    /**
+     * Uses the list of Jumpable Names from Survey to create a new ComboBox
+     * model and set it as the model for the navComboBox
+     * @param cb
+     */
+    public void setComboBox(JComboBox cb){
+        DefaultComboBoxModel myModel = new DefaultComboBoxModel();
+        for(String element : survey.getJumpableNames()){
+            myModel.addElement(element);
+        }
+        cb.setModel(myModel);
+        //cb.setSelectedIndex(drawer.getPosition());
+        //cb.setSelectedItem((Object)(survey.get(drawer.getPosition()).getName()));
     }
     public boolean save(){
         boolean saveable = false;
@@ -108,7 +128,9 @@ public class NavController {
                     
         }
         //save it if possible
-        if(saveable) drawer.getQuestion().setAnswer(tempStrings);
+        if(saveable) {
+            drawer.getQuestion().setAnswer(tempStrings);
+        }
         
         return saveable; //return if it saved
     }

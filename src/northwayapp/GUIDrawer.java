@@ -29,17 +29,19 @@ public class GUIDrawer extends ThompsonTemplate{
     NavController navigator;
     NavController.Next nextAction;
     Font labelFont, fieldFont;
+    JComboBox navComboBox;
       
     //Constructors
-    public GUIDrawer(Survey survey, JPanel pane1, JPanel pane2, JPanel pane3){
+    public GUIDrawer(Survey survey, JPanel pane1, JPanel pane2, JPanel pane3, JComboBox cb){
         this(pane1, pane2);
         this.survey = survey;
         panel3 = pane3;
         navigator = new NavController(this, survey, survey.getClientFileName());
         position = this.survey.getLastQuestionIndex();
-        drawQuestion();
+        this.navComboBox = cb;
         //used to create an instance of the NavC innerclass Next
         nextAction = navigator.new Next();
+        drawQuestion();
     }
     
     public GUIDrawer(JPanel pane1, JPanel pane2){
@@ -88,6 +90,9 @@ public class GUIDrawer extends ThompsonTemplate{
     public String getType(){
         return survey.get(position).getType();
     }
+    public int getPosition(){
+        return this.position;
+    }
     public int getReps(){
         String tempString;
         try{
@@ -116,6 +121,7 @@ public class GUIDrawer extends ThompsonTemplate{
         panel1.add(temp); //Draw JLabel
         drawControl(getQuestion(), panel2);
         drawNavButtons(panel3);
+        navigator.setComboBox(navComboBox);
         panel1.revalidate();
         panel1.repaint();
     }
@@ -238,6 +244,9 @@ public class GUIDrawer extends ThompsonTemplate{
     public void jumpTo(int i){
         position = i;
         drawQuestion();
+    }
+    public void jumpTo(String name){
+        this.jumpTo(survey.getIndex(name));
     }
     public void jumpToLast(){
         position = survey.getLastQuestionIndex();
