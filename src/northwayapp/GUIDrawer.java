@@ -30,6 +30,7 @@ public class GUIDrawer extends ThompsonTemplate{
     NavController.Next nextAction;
     Font labelFont, fieldFont;
     JComboBox navComboBox;
+    CardLayoutManager clManager;
       
     //Constructors
     public GUIDrawer(Survey survey, JPanel pane1, JPanel pane2, JPanel pane3, JComboBox cb){
@@ -66,7 +67,9 @@ public class GUIDrawer extends ThompsonTemplate{
         panel1 = pane1;
         
     }
-    
+    public void setCardControls(CardLayoutManager clm){
+        this.clManager = clm;
+    }
     public boolean isLastCopy(Question question){
         boolean flag = false;
         String repeater = question.getRepeaterPointer();
@@ -238,8 +241,11 @@ public class GUIDrawer extends ThompsonTemplate{
     
     public void increment(int i){
         position += i;
-        if(position < 0 || position >= survey.size()) position = 0;
-        drawQuestion();
+        if(position < 0) position = 0;
+        if(position >= survey.size()){
+            clManager.show("reviewCard");
+        }
+        else drawQuestion();
     }
     public void jumpTo(int i){
         position = i;

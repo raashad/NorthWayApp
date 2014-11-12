@@ -86,6 +86,7 @@ public class NorthwayApp extends javax.swing.JFrame {
         quoteTypeLabel = quoteType.toUpperCase();
         quoteHeaderLabel.setText(quoteTypeLabel);
         drawer = new GUIDrawer(survey, textP, fieldsP, navP, navComboBox);
+        drawer.setCardControls(clManager1);
     }
     
 
