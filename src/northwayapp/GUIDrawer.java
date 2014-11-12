@@ -244,6 +244,7 @@ public class GUIDrawer extends ThompsonTemplate{
         if(position < 0) position = 0;
         if(position >= survey.size()){
             clManager.show("reviewCard");
+            position -= i;
         }
         else drawQuestion();
     }

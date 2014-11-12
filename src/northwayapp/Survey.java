@@ -305,6 +305,14 @@ public class Survey {
                 lastFound = true;
             }
         }
+        boolean allAnswered = true;
+        for(int i = 0; i < this.survey.size(); i++){
+            if(!this.survey.get(i).getAnswerState()){
+                allAnswered = false;
+                break;
+            }
+        }
+        if(allAnswered) this.survey.get(this.survey.size()-1).setLastState(true);
     }
 
 }

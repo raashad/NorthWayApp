@@ -82,7 +82,7 @@ public class NorthwayApp extends javax.swing.JFrame {
         clManager1.addCardName(surveyPanel, "surveyCard");
         clManager1.addCardName(reviewPanel, "reviewCard");
         //cl.next(cardPanel);
-        clManager1.next();
+        clManager1.show("surveyCard");
         quoteTypeLabel = quoteType.toUpperCase();
         quoteHeaderLabel.setText(quoteTypeLabel);
         drawer = new GUIDrawer(survey, textP, fieldsP, navP, navComboBox);
@@ -467,6 +467,11 @@ public class NorthwayApp extends javax.swing.JFrame {
         });
 
         jButton6.setText("return to survey");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout reviewPanelLayout = new javax.swing.GroupLayout(reviewPanel);
         reviewPanel.setLayout(reviewPanelLayout);
@@ -632,6 +637,10 @@ public class NorthwayApp extends javax.swing.JFrame {
             Logger.getLogger(NorthwayApp.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        clManager1.show("surveyCard");
+    }//GEN-LAST:event_jButton6ActionPerformed
     
     
     
