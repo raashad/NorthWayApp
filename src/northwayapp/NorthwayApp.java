@@ -43,7 +43,7 @@ public class NorthwayApp extends javax.swing.JFrame {
     CardLayoutManager clManager1;
     PDFWriter pdfWriter;
     
-    public NorthwayApp() throws IOException {
+    public NorthwayApp() throws IOException, COSVisitorException {
         initComponents();
         fileInfo = new ArrayList<>();
         validator = new ValidationTool();
@@ -54,6 +54,7 @@ public class NorthwayApp extends javax.swing.JFrame {
         /*
         CardLayout cl = (CardLayout)cardPanel.getLayout();
         cl.show(cardPanel, "reviewCard");
+        pdfWriter.testRun();
         
         quoteType = "Auto";
         twoFiles.setQuoteSheet(quoteType);
@@ -478,20 +479,23 @@ public class NorthwayApp extends javax.swing.JFrame {
         reviewPanelLayout.setHorizontalGroup(
             reviewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(reviewPanelLayout.createSequentialGroup()
-                .addGap(161, 161, 161)
+                .addGap(215, 215, 215)
                 .addComponent(jButton5)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton6)
-                .addContainerGap(250, Short.MAX_VALUE))
+                .addContainerGap(182, Short.MAX_VALUE))
         );
+
+        reviewPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton5, jButton6});
+
         reviewPanelLayout.setVerticalGroup(
             reviewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(reviewPanelLayout.createSequentialGroup()
-                .addGap(145, 145, 145)
+                .addContainerGap(305, Short.MAX_VALUE)
                 .addGroup(reviewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton5)
                     .addComponent(jButton6))
-                .addContainerGap(186, Short.MAX_VALUE))
+                .addGap(26, 26, 26))
         );
 
         cardPanel.add(reviewPanel, "reviewCard");
@@ -630,7 +634,11 @@ public class NorthwayApp extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         try {
-            pdfWriter.testRun();
+            pdfWriter = new PDFWriter();
+            if(quoteType == "Home"){
+                pdfWriter.printSurvey(survey, "zz " + agent + " home quote.pdf");
+            }
+            else pdfWriter.testRun();
         } catch (IOException ex) {
             Logger.getLogger(NorthwayApp.class.getName()).log(Level.SEVERE, null, ex);
         } catch (COSVisitorException ex) {
@@ -682,6 +690,8 @@ public class NorthwayApp extends javax.swing.JFrame {
                 try {
                     new NorthwayApp().setVisible(true);
                 } catch (IOException ex) {
+                    Logger.getLogger(NorthwayApp.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (COSVisitorException ex) {
                     Logger.getLogger(NorthwayApp.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }

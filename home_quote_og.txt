@@ -1,0 +1,9 @@
+Group;Group;TEXTFIELD
+Date;Date (MM/DD/YYYY);TEXTFIELD
+Name;Name;TEXTFIELD
+Email;Email Address;TEXTFIELD
+Basement;HOME INFO: Basement;RADIOBUTTON;Yes;No
+Features;HOME INFO: Other features;CHECKBOX;Woodstove;Deck;Porch;Central Air
+YearBuilt;HOME INFO: Year Built;TEXTFIELD
+SQfootage;HOME INFO: Square footage;TEXTFIELD
+Credits;Homeowner Credits;CHECKBOX;Non smoker;Deadbolt;Fire Exit;Smoke Detector;Local Alarm;Central Alarm

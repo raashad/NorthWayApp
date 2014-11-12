@@ -1,9 +1,4 @@
-Group;real group
-Date;20/47/2047
-Name;Hugh Mann
-Email;real@web.site
-Basement;Yes
-Features;Deck
-YearBuilt;1839
-SQfootage;afhahah
-Credits;Central Alarm
+Group;Johnson & Johnson
+Date;11/12/2014
+Name;Rashad IF Baiyasi
+LASTEmail;nopenoway@northway.gov

@@ -1,9 +1,0 @@
-Group;arhefdha
-Date;gsjsgfs
-LASTName
-Email
-Basement
-Features
-YearBuilt
-SQfootage
-Credits
