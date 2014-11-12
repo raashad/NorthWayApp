@@ -17,6 +17,8 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
+import org.apache.pdfbox.exceptions.COSVisitorException;
+import org.apache.pdfbox.pdmodel.*;
 
 /**
  *
@@ -38,15 +40,21 @@ public class NorthwayApp extends javax.swing.JFrame {
     ValidationTool validator;
     FileOperator twoFiles;
     String quoteType, agent, lastName, firstName, quoteTypeLabel;
+    CardLayoutManager clManager1;
+    PDFWriter pdfWriter;
     
-    public NorthwayApp() {
+    public NorthwayApp() throws IOException {
         initComponents();
         fileInfo = new ArrayList<>();
         validator = new ValidationTool();
         twoFiles = new FileOperator();
+        pdfWriter = new PDFWriter();
         
         //temporary to work on layout
         /*
+        CardLayout cl = (CardLayout)cardPanel.getLayout();
+        cl.show(cardPanel, "reviewCard");
+        
         quoteType = "Auto";
         twoFiles.setQuoteSheet(quoteType);
         twoFiles.setFile("Dell", "Doe", "John");
@@ -69,7 +77,12 @@ public class NorthwayApp extends javax.swing.JFrame {
         }
         
         CardLayout cl = (CardLayout)cardPanel.getLayout();
-        cl.next(cardPanel);
+        clManager1 = new CardLayoutManager(cardPanel, cl);
+        clManager1.addCardName(tempStartPanel, "tempStartCard");
+        clManager1.addCardName(surveyPanel, "surveyCard");
+        clManager1.addCardName(reviewPanel, "reviewCard");
+        //cl.next(cardPanel);
+        clManager1.next();
         quoteTypeLabel = quoteType.toUpperCase();
         quoteHeaderLabel.setText(quoteTypeLabel);
         drawer = new GUIDrawer(survey, textP, fieldsP, navP, navComboBox);
@@ -118,6 +131,9 @@ public class NorthwayApp extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         navComboBox = new javax.swing.JComboBox();
         jLabel7 = new javax.swing.JLabel();
+        reviewPanel = new javax.swing.JPanel();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
 
         jLabel6.setText("An Error has occured");
 
@@ -336,7 +352,7 @@ public class NorthwayApp extends javax.swing.JFrame {
                 .addGroup(tempStartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(252, Short.MAX_VALUE))
+                .addGap(67, 252, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tempStartPanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(startSurveyButton)
@@ -349,7 +365,7 @@ public class NorthwayApp extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
                 .addComponent(startSurveyButton)
                 .addContainerGap())
         );
@@ -442,6 +458,38 @@ public class NorthwayApp extends javax.swing.JFrame {
 
         cardPanel.add(surveyPanel, "surveyCard");
 
+        jButton5.setText("create PDF");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jButton6.setText("return to survey");
+
+        javax.swing.GroupLayout reviewPanelLayout = new javax.swing.GroupLayout(reviewPanel);
+        reviewPanel.setLayout(reviewPanelLayout);
+        reviewPanelLayout.setHorizontalGroup(
+            reviewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(reviewPanelLayout.createSequentialGroup()
+                .addGap(161, 161, 161)
+                .addComponent(jButton5)
+                .addGap(18, 18, 18)
+                .addComponent(jButton6)
+                .addContainerGap(250, Short.MAX_VALUE))
+        );
+        reviewPanelLayout.setVerticalGroup(
+            reviewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(reviewPanelLayout.createSequentialGroup()
+                .addGap(145, 145, 145)
+                .addGroup(reviewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton5)
+                    .addComponent(jButton6))
+                .addContainerGap(186, Short.MAX_VALUE))
+        );
+
+        cardPanel.add(reviewPanel, "reviewCard");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -505,8 +553,13 @@ public class NorthwayApp extends javax.swing.JFrame {
             twoFiles.createFile();
         }
         try{
+            /*
+            CardLayout cl = (CardLayout)cardPanel.getLayout();
+            cl.show(cardPanel, "reviewCard");
+            */
             createSurveySpace(twoFiles,
                 textPanel, fieldsPanel, navPanel);
+            
         }catch(IllegalArgumentException e){
             System.err.println("fileOperator can't make the survey: " + e.getMessage());
             fileCreationErrorDB.getParent().add(fileCreationErrorDB);
@@ -568,6 +621,16 @@ public class NorthwayApp extends javax.swing.JFrame {
         String tempString = (String)navComboBox.getSelectedItem();
         drawer.jumpTo(tempString);
     }//GEN-LAST:event_navComboBoxActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        try {
+            pdfWriter.testRun();
+        } catch (IOException ex) {
+            Logger.getLogger(NorthwayApp.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (COSVisitorException ex) {
+            Logger.getLogger(NorthwayApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
     
     
     
@@ -606,7 +669,11 @@ public class NorthwayApp extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new NorthwayApp().setVisible(true);
+                try {
+                    new NorthwayApp().setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(NorthwayApp.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -625,6 +692,8 @@ public class NorthwayApp extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -641,6 +710,7 @@ public class NorthwayApp extends javax.swing.JFrame {
     private javax.swing.JTextArea notebookText;
     private javax.swing.JLabel quoteHeaderLabel;
     private javax.swing.JComboBox quotePicker;
+    private javax.swing.JPanel reviewPanel;
     private javax.swing.JButton startSurveyButton;
     private javax.swing.JPanel surveyPanel;
     private javax.swing.JPanel tempStartPanel;

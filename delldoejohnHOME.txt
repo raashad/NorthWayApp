@@ -5,5 +5,5 @@ Email;real@web.site
 Basement;Yes
 Features;Deck
 YearBuilt;1839
-LASTSQfootage
-Credits
+SQfootage;afhahah
+LASTCredits

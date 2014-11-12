@@ -10,4 +10,4 @@ Vehicle 2;adsh;sdahgfds
 Vehicle 3;fafdj;sjsgfsj
 Other;dsafdhafh
 AirBags;With Side
-LASTCoverage
+Coverage;Collision Broad
